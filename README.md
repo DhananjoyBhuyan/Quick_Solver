@@ -1,2 +1,6 @@
-# This repository is not for download or clone or pull request or anything on github. It was made just for hosting these files online.
-# NOTHING TO DO WITH THIS IN GITHUB.
+# Download the `quick_solver_installer.sh` file, then open your terminal and run:-
+```bash
+chmod +x /path/to/quick_solver_installer.sh
+bash /path/to/quick_solver_installer.sh
+```
+# NOTE: This is only for linux, and might not work on other operating systems.

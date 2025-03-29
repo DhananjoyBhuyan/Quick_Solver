@@ -32,7 +32,10 @@ cd ~/.local/share/applications
 wget https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/quick_solver.desktop
 chmod +x ./quick_solver.desktop
 gio set ~/.local/share/applications/quick_solver.desktop metadata::trusted true
+chmod +x ./quick_solver.desktop
 sed -i "s|\$HOME|$HOME|g" ~/.local/share/applications/quick_solver.desktop
+chmod +x ./quick_solver.desktop
+chmod +x ./quick_solver.desktop
 echo " "
 echo "Dependency2 installed!!"
 echo " "
@@ -55,7 +58,11 @@ cd ~/Desktop
 wget https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/quick_solver.desktop
 chmod +x ./quick_solver.desktop
 gio set ~/Desktop/quick_solver.desktop metadata::trusted true
+chmod +x ./quick_solver.desktop
+chmod +x ./quick_solver.desktop
 sed -i "s|\$HOME|$HOME|g" ~/Desktop/quick_solver.desktop
+chmod +x ./quick_solver.desktop
+chmod +x ./quick_solver.desktop
 echo " "
 echo "Great!! You can also find the game icon in your desktop!!!!!"
 echo " "

@@ -146,7 +146,7 @@ def log_in():
 
 def leaderboard(name):
     global SCORE
-    with open("./quick_solver_scores.json") as f:
+    with open(f"{os.path.expanduser('~')}/.Quick_Solver/quick_solver_scores.json") as f:
         data = json.load(f)
     data[name] = str(int(data[name]) + SCORE)
     data = {int(v): k for k, v in data.items()}

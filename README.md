@@ -10,4 +10,4 @@ bash /path/to/quick_solver_installer.sh
 3. Make sure it's enabled.
 4. (Optional step to be sure that the game works) Now open a terminal window and run then run `chmod +x /home/YourUserName/Desktop/quick_solver.desktop` . Replace `YourUserName` with your actual home directory username.
 
-##### if it still doesn't work, you might be having some problem with your linux OS(Operating System) or your Linux or the version of your linux is very different from the ones that are mostly used these days (e. g. Ubuntu jammy-jellyfish 22.04, Ubuntu noble-numbat 24.04.2, etc).
+

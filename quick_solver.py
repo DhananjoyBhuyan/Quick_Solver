@@ -44,7 +44,7 @@ def get(key: str,
         database_name: str):
     
     database_name += '.json'
-    if os.path.exists(database_name):
+    if os.path.exists(f"{os.path.expanduser('~')}/.Quick_Solver/{database_name}"):
         with open(f"{os.path.expanduser('~')}/.Quick_Solver/{database_name}") as f:
             full_data = json.load(f)
         if not full_data:

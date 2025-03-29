@@ -151,7 +151,8 @@ def leaderboard(name):
     data[name] = str(int(data[name]) + SCORE)
     data = {int(v): k for k, v in data.items()}
     data = dict(sorted(data.items(), reverse=True))
-
+	if len(data.keys()) == 1:
+		print("\n\nNOTE: More than one player can play on this device with different usernames, so the leader board doesn't have only one player to show!\n")
     print("_"*67 + "\nLeaderboard:-")
     print("_"*67)
     sleep(1)

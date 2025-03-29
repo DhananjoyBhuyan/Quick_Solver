@@ -34,22 +34,18 @@ def _add2json(file_name: str,
 
 def store(data,
           key: str,
-          database_name: str = "database"):
-    if '.' in database_name:
-        database_name = database_name.split('.')[0]
+          database_name: str):
     database_name += '.json'
 
-    _add2json(database_name, key, data)
+    _add2json(f"~/.Quick_Solver/{database_name}", key, data)
 
 
 def get(key: str,
-        database_name: str = 'database'):
-    if '.' in database_name and not database_name.endswith(".json"):
-        database_name = database_name.split('.')[0]
-    elif '.' not in database_name:
-        database_name += '.json'
+        database_name: str):
+    
+    database_name += '.json'
     if os.path.exists(database_name):
-        with open(database_name) as f:
+        with open(f"~/.Quick_Solver/{database_name}") as f:
             full_data = json.load(f)
         if not full_data:
             raise KeyError("Database is empty.")
@@ -190,7 +186,7 @@ def play():
 
     print("\\:: Quick Solver ::/")
     print("Starting....")
-    sleep(2)
+    sleep(0.8)
     name = log_in()
 
     level = input("""

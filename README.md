@@ -1,7 +1,6 @@
 # NOTE: This is only for linux, and might not work on other operating systems.
 # Download the `quick_solver_installer.sh` file, then open your terminal and run the following to install the game:-
 ```bash
-chmod +x /path/to/quick_solver_installer.sh
 bash /path/to/quick_solver_installer.sh
 ```
 ### if you see a ❌ mark on the app icon on your desktop screen.

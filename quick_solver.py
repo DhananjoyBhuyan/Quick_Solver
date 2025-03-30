@@ -188,6 +188,8 @@ def play():
     global NAME
 
     CORRECT = 0
+    SCORE = 0
+    TIMES = []
 
     print("\\:: Quick Solver ::/")
     print("Starting....")

@@ -121,11 +121,13 @@ def ask_and_calculate(level: int = 1):
 
 
 def get_name():
-    name = input("Enter your username: ")
-    if not name:
-        print("Please enter your username...")
-        name = get_name()
-    return name
+    while 1:
+		name = input("Enter your username: ")
+		if not name:
+			print("Please enter your username.")
+			continue
+		else:
+			return name
 
 
 def log_in():
@@ -170,16 +172,14 @@ def leaderboard(name):
 
 
 def questions():
-    try:
-        noq = int(input(
-            "How many questions will you solve in this session?\nNumber of questions: "))
-        if not noq:
-            noq = questions()
-    except ValueError:
-        print("\nEnter a number, invalid input was given.\n")
-        noq = questions()
-    return noq
-
+    while 1:
+		try:
+			noq = int(input("How many questions are you willing to solve in this session?\nNumber of questions: "))
+			
+		except ValueError:
+			print("Invalid input!!")
+			continue
+	return noq
 
 def play():
     global CORRECT

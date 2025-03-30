@@ -153,8 +153,8 @@ def leaderboard(name):
     with open(f"{os.path.expanduser('~')}/.Quick_Solver/quick_solver_scores.json") as f:
         data = json.load(f)
     data[name] = str(int(data[name]) + SCORE)
-    data = {int(v): k for k, v in data.items()}
-    data = dict(sorted(data.items(), reverse=True))
+    data = {k: int(v) for k, v in data.items()}
+    data = dict(sorted(data.items(), key=lambda x: x[1], reverse=True))
     if len(data.keys()) == 1:
         print("\n\nNOTE: More than one player can play on this device with different usernames, so the leader board doesn't have only one player to show!\n")
         print("Even you can compete with yourself with different usernames!!\n")

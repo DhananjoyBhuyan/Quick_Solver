@@ -161,8 +161,8 @@ def leaderboard(name):
     print("_"*67 + "\nLeaderboard:-")
     print("_"*67)
     sleep(1)
-    for idx, score in enumerate(data, 1):
-        curname = data[score]
+    for idx, curname in enumerate(data, 1):
+        score = data[curname]
         if curname == name:
             print(f"| {idx} | {curname}(You)          score: {score}")
         else:
@@ -180,7 +180,6 @@ def questions():
         except ValueError:
             print("Invalid input!!")
             continue
-    
 
 
 def play():

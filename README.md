@@ -1,4 +1,4 @@
-# NOTE: This is only for linux, and might not work on other operating systems.
+# NOTE: This is only for linux, and will not work on other operating systems.
 # Download the `quick_solver_installer.sh` file, then open your terminal and run the following to install the game:-
 ```bash
 bash /path/to/quick_solver_installer.sh

@@ -43,6 +43,25 @@ echo " "
 echo "Dependency2 installed!!"
 echo " "
 echo " "
+mkdir -p ~/.qsi
+cd ~/.Quick_Solver
+echo "Installing dependency3"
+python -m pip install requests
+echo "installed dependency3"
+echo " "
+echo " "
+echo "Installing dependency4....."
+echo " "
+echo " "
+wget https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/latest_version.txt
+mv ./latest_version.txt ./version.txt
+cd ~/.qsi
+echo " "
+echo " "
+echo "Installing dependency5....."
+echo " "
+echo " "
+wget https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/qsi4update.sh
 echo "Successfully installed Quick Solver!!"
 echo " "
 echo " "

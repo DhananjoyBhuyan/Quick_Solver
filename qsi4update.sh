@@ -18,9 +18,12 @@ chmod +x ./quick_solver.desktop
 sed -i "s|\$HOME|$HOME|g" ~/.local/share/applications/quick_solver.desktop
 chmod +x ./quick_solver.desktop
 chmod +x ./quick_solver.desktop
+cd ~/.Quick_Solver
 python -m pip install requests
 wget https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/latest_version.txt
 mv ./latest_version.txt ./version.txt
+echo " "
+echo " "
 echo " "
 echo " "
 echo "Successfully updated Quick Solver!!"

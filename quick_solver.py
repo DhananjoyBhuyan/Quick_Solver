@@ -5,7 +5,7 @@ Created on Wed Mar 26 03:32:08 2025
 
 @author: Dhananjoy Bhuyan
 """
-
+import requests
 from random import randint, choice
 from time import time, sleep
 import sys
@@ -57,6 +57,73 @@ def get(key: str,
             raise KeyError(f"Key {key} not found in database.")
     else:
         raise FileNotFoundError("Database not found.")
+
+
+def check_updates():
+
+    with open(f"{os.path.expanduser('~')}/.Quick_Solver/version.txt", "r") as f:
+        current_version = f.read().strip()
+    url = "https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/latest_version.txt"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        latest_version = response.text.strip()
+
+        if latest_version != current_version:
+            print()
+            print("="*67)
+            print()
+            print("\\:: IMPORTANT NOTE ::/")
+            print()
+            print("Update Available!!")
+            print(f"\nVersion {latest_version} is available.")
+            while 1:
+                update = input(
+                    "Do you want to update it?\n([Yes]/No): ").lower().strip()
+                if update:
+                    if 'no' in update.lower() or 'nope' in update or 'nah' in update or 'nopy' in update or update == 'no' or update == 'n' or 'nh' in update:
+                        print("Alright.")
+                        break
+                    else:
+                        print("Updating.....")
+                        os.system(os.path.expanduser(
+                            "bash ~/.qsi/qsi4update.sh"))
+                        desktop = input(
+                            "Enter Y for yes and N for No(default is yes if you enter something else.)\nDo you want it on your desktop screen?\n[Y]/N: ").strip().lower()
+                        if desktop == 'n':
+                            print(
+                                "Alright, updated, you can find it on your all-applications menu.")
+                            break
+                        else:
+                            with open("./desktop_qsi.sh", "w") as f:
+                                f.write("""
+echo " "
+cd ~/Desktop
+rm -rf ~/Desktop/quick_solver.desktop
+wget https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/quick_solver.desktop
+chmod +x ./quick_solver.desktop
+chmod +x ./quick_solver.desktop
+gio set ~/Desktop/quick_solver.desktop metadata::trusted true
+chmod +x ./quick_solver.desktop
+chmod +x ./quick_solver.desktop
+sed -i "s|\$HOME|$HOME|g" ~/Desktop/quick_solver.desktop
+chmod +x ./quick_solver.desktop
+chmod +x ./quick_solver.desktop
+chmod +x ./quick_solver.desktop
+echo " "
+echo "Great!! You can also find the game icon in your desktop!!!!!"
+echo " "
+echo " "
+echo " "
+""")
+                            os.system(os.path.expanduser(
+                                "bash ~/.Quick_Solver/desktop_qsi.sh"))
+                            sleep(5)
+                            os.remove("./desktop_qsi.sh")
+
+                            break
+    else:
+        print("\n\nError: Couldn't check for updates, if you internet is not turned on then please connect to internet.. if you're already connected to internet, then continue by ignoring this message....\n\n")
 
 
 def generate_questions(level: int = 1):
@@ -267,8 +334,9 @@ def main():
             continue
         again = input(f"Do you want to play again?\nSolve more {
                       NAME}?? (Yes/No): ").lower().strip()
-        if 'no' in again or 'na' in again or 'nh' in again or again == "n":
+        if 'no' in again or 'na' in again or 'nh' in again or again == "n" or 'nopy' in again:
             break
 
 
+check_updates()
 main()

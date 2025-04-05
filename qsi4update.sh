@@ -44,7 +44,7 @@ chmod +x ./quick_solver.desktop
 gio set ~/Desktop/quick_solver.desktop metadata::trusted true
 chmod +x ./quick_solver.desktop
 chmod +x ./quick_solver.desktop
-sed -i "s|\\$HOME|$HOME|g" ~/Desktop/quick_solver.desktop
+sed -i "s|\$HOME|$HOME|g" ~/Desktop/quick_solver.desktop
 chmod +x ./quick_solver.desktop
 chmod +x ./quick_solver.desktop
 chmod +x ./quick_solver.desktop

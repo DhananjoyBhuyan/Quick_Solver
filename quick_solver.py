@@ -73,7 +73,7 @@ def check_updates():
             print()
             print("="*67)
             print()
-            print("\\:: IMPORTANT NOTE ::/")
+            print("\\:: IMPORTANT ::/")
             print()
             print("Update Available!!")
             print(f"\nVersion {latest_version} is available.")

@@ -58,6 +58,7 @@ def get(key: str,
     else:
         raise FileNotFoundError("Database not found.")
 
+
 def want_desktop():
     print("Do you want the game icon to appear in the desktop as well?")
     a = input("Yes/No (default is yes): ")
@@ -70,6 +71,8 @@ def want_desktop():
         print("Alright....")
         return None
     os.system(os.path.expanduser("bash ~/.qsi/qsi4dsktp.sh"))
+
+
 def check_updates():
 
     with open(f"{os.path.expanduser('~')}/.Quick_Solver/version.txt", "r") as f:
@@ -99,7 +102,7 @@ def check_updates():
                         print("Updating.....")
                         os.system(os.path.expanduser(
                             "bash ~/.qsi/qsi4update.sh"))
-                            break
+                        break
 
                 else:
                     print("\nPlease enter either yes or no.\n")
@@ -320,6 +323,7 @@ def main():
                       NAME}?? (Yes/No): ").lower().strip()
         if 'no' in again or 'na' in again or 'nh' in again or again == "n" or 'nopy' in again:
             break
+
 
 if not os.path.exists(os.path.expanduser("~/.Quick_Solver/first.txt")):
     want_desktop()

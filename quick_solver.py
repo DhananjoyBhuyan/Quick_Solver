@@ -58,7 +58,18 @@ def get(key: str,
     else:
         raise FileNotFoundError("Database not found.")
 
-
+def want_desktop():
+    print("Do you want the game icon to appear in the desktop as well?")
+    a = input("Yes/No (default is yes): ")
+    nos = ["no", "nah", "nopy", "nh", "na"]
+    for i in nos:
+        if i in a:
+            print("Alright")
+            return None
+    if a == 'n':
+        print("Alright....")
+        return None
+    os.system(os.path.expanduser("bash ~/.qsi/qsi4dsktp.sh"))
 def check_updates():
 
     with open(f"{os.path.expanduser('~')}/.Quick_Solver/version.txt", "r") as f:
@@ -88,39 +99,6 @@ def check_updates():
                         print("Updating.....")
                         os.system(os.path.expanduser(
                             "bash ~/.qsi/qsi4update.sh"))
-                        desktop = input(
-                            "Enter Y for yes and N for No(default is yes if you enter something else.)\nDo you want it on your desktop screen?\n[Y]/N: ").strip().lower()
-                        if desktop == 'n':
-                            print(
-                                "Alright, updated, you can find it on your all-applications menu.")
-                            break
-                        else:
-                            with open(os.path.expanduser("~/.Quick_Solver/desktop_qsi.sh"), "w") as f:
-                                f.write("""
-echo " "
-cd ~/Desktop
-rm -rf ~/Desktop/quick_solver.desktop
-wget https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/quick_solver.desktop
-chmod +x ./quick_solver.desktop
-chmod +x ./quick_solver.desktop
-gio set ~/Desktop/quick_solver.desktop metadata::trusted true
-chmod +x ./quick_solver.desktop
-chmod +x ./quick_solver.desktop
-sed -i "s|\\$HOME|$HOME|g" ~/Desktop/quick_solver.desktop
-chmod +x ./quick_solver.desktop
-chmod +x ./quick_solver.desktop
-chmod +x ./quick_solver.desktop
-echo " "
-echo "Great!! You can also find the game icon in your desktop!!!!!"
-echo " "
-echo " "
-echo " "
-""")
-                            os.system(os.path.expanduser(
-                                "bash ~/.Quick_Solver/desktop_qsi.sh"))
-                            sleep(5)
-                            os.remove(os.path.expanduser("~/.Quick_Solver/desktop_qsi.sh"))
-
                             break
 
                 else:

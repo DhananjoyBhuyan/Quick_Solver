@@ -61,7 +61,7 @@ def get(key: str,
 
 def want_desktop():
     print("Do you want the game icon to appear in the desktop as well?")
-    a = input("Yes/No (default is yes): ")
+    a = input("Yes/No (default is yes): ").lower().strip()
     nos = ["no", "nah", "nopy", "nh", "na"]
     for i in nos:
         if i in a:

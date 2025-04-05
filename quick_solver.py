@@ -239,6 +239,9 @@ def play():
     SCORE = 0
     TIMES = []
 
+    with open(os.path.expanduser("~/.Quick_Solver/first.txt"), "w") as f:
+        f.write("game launched.")
+
     print("\\:: Quick Solver ::/")
     print("Starting....")
     sleep(0.8)
@@ -318,6 +321,7 @@ def main():
         if 'no' in again or 'na' in again or 'nh' in again or again == "n" or 'nopy' in again:
             break
 
-
+if not os.path.exists(os.path.expanduser("~/.Quick_Solver/first.txt")):
+    want_desktop()
 check_updates()
 main()

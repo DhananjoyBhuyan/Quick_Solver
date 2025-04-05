@@ -35,6 +35,7 @@ read -p "Do you want the game icon in your desktop? Enter Y for yes and N for no
 if [[ "$dsktp" =~ ^[Nn]$ ]]; then
     echo "Alright!! So you can find the game in your all-applications menu!!"
     exit 1
+fi
 cd ~/Desktop
 rm -rf ~/Desktop/quick_solver.desktop
 wget https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/quick_solver.desktop

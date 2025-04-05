@@ -95,7 +95,7 @@ def check_updates():
                                 "Alright, updated, you can find it on your all-applications menu.")
                             break
                         else:
-                            with open("./desktop_qsi.sh", "w") as f:
+                            with open(os.path.expanduser("~/.Quick_Solver/desktop_qsi.sh"), "w") as f:
                                 f.write("""
 echo " "
 cd ~/Desktop
@@ -119,7 +119,7 @@ echo " "
                             os.system(os.path.expanduser(
                                 "bash ~/.Quick_Solver/desktop_qsi.sh"))
                             sleep(5)
-                            os.remove("./desktop_qsi.sh")
+                            os.remove(os.path.expanduser("~/.Quick_Solver/desktop_qsi.sh"))
 
                             break
 

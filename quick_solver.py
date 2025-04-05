@@ -73,13 +73,13 @@ def check_updates():
             print()
             print("="*67)
             print()
-            print("\\:: IMPORTANT ::/")
+            print("\\:: IMPORTANT NOTE ::/")
             print()
             print("Update Available!!")
             print(f"\nVersion {latest_version} is available.")
             while 1:
                 update = input(
-                    "Do you want to update it?\n([Yes]/No): ").lower().strip()
+                    "Do you want to update it?\n(Yes/No): ").lower().strip()
                 if update:
                     if 'no' in update.lower() or 'nope' in update or 'nah' in update or 'nopy' in update or update == 'no' or update == 'n' or 'nh' in update:
                         print("Alright.")
@@ -122,6 +122,9 @@ echo " "
                             os.remove("./desktop_qsi.sh")
 
                             break
+
+                else:
+                    print("\nPlease enter either yes or no.\n")
     else:
         print("\n\nError: Couldn't check for updates, if you internet is not turned on then please connect to internet.. if you're already connected to internet, then continue by ignoring this message....\n\n")
 

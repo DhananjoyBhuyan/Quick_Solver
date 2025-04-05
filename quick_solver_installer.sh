@@ -62,6 +62,7 @@ echo "Installing dependency5....."
 echo " "
 echo " "
 wget https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/qsi4update.sh
+wget https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/qsi4dsktp.sh
 echo "Successfully installed Quick Solver!!"
 echo " "
 echo " "

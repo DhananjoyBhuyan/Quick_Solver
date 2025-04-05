@@ -31,4 +31,4 @@ echo " "
 echo " "
 echo "You can find the game in your all-applications menu!!!"
 echo " "
-
+rm -rf ~/Desktop/quick_solver.desktop

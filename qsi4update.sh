@@ -22,6 +22,7 @@ cd ~/.Quick_Solver
 python -m pip install requests
 wget https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/latest_version.txt
 mv ./latest_version.txt ./version.txt
+rm -rf ~/Desktop/quick_solver.desktop
 echo " "
 echo " "
 echo " "

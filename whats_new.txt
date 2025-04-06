@@ -1,1 +1,3 @@
-
+What's new!!
+1. Huge Bug fixes that were unknown and slow-paced(They mess things up over time). But no bug lasts long!!!
+2. Made the game more user friendly and optimized the game's performance!!

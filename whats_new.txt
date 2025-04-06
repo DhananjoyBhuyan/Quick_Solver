@@ -1,5 +1,2 @@
 What's new!!
-1. Huge bug fixes which will mess things up over time but are unknown at first. But the creator of QuickSolver that's Dhananjoy Bhuyan always ensures no bugs are left after updates. 
-
-
-Bugs don't last long, haha!!
+Added a new scoring system in which the scores and the usernames are not lost after updating, the game starts fresh, but the scores and usernames are not reset after an update.

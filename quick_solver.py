@@ -242,8 +242,9 @@ def play():
     SCORE = 0
     TIMES = []
 
-    with open(os.path.expanduser("~/.Quick_Solver/first.txt"), "w") as f:
-        f.write("game launched.")
+    if not os.path.exists(os.path.expanduser("~/.Quick_Solver/first.txt")):
+        with open(os.path.expanduser("~/.Quick_Solver/first.txt"), "w") as f:
+            f.write("This file was created when the game was first launched on this device.")
 
     print("\\:: Quick Solver ::/")
     print("Starting....")

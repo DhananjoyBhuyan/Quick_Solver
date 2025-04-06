@@ -99,6 +99,7 @@ def check_updates():
             print("Update Available!!")
             print(f"\nVersion {latest_version} is available.")
             print()
+            print("Your currently installed version: ", current_version)
             print(new)
             while 1:
                 update = input(

@@ -1,0 +1,4 @@
+What's New!!
+1. Added a "what's new" section which shows what's different in the update.
+2. UX was improved.
+3. Bug fixes.

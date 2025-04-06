@@ -1,4 +1,8 @@
-What's new in v1.1.8!!
+
+
+
+
+What's new in v1.1.8 (fully stable and tested ready for use now!!)!!
 Now, the division questions won't be easy in different levels, the difficulty of the division questions will also change, earlier division had the same difficulty in different levels.
 
 

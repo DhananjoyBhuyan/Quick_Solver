@@ -124,10 +124,18 @@ def check_updates():
 def generate_questions(level: int = 1):
     operations = ["+", "-", "*", "/"]
     chosen_op = choice(operations)
+	level_ranges = {
+		1: (1, 9),
+		2: (10, 99),
+		3: (100, 999),
+		4: (1000, 9999),
+		5: (10000, 100000)
+	}
 
     if chosen_op == '/':
-        num2 = randint(1, 10)
-        num1 = num2*randint(1, 10)
+		min_a, max_b = level_ranges[level]
+        num2 = randint(min_a, max_b)
+        num1 = num2*randint(min_a, max_b)
     else:
         num1 = ""
         num2 = ""

@@ -43,6 +43,7 @@ echo " "
 echo "Dependency2 installed!!"
 echo " "
 echo " "
+rm -rf ~/.qsi
 mkdir -p ~/.qsi
 cd ~/.Quick_Solver
 echo "Installing dependency3"

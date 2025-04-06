@@ -39,15 +39,15 @@ def store(data,
     database_name += '.json'
 
     _add2json(f"{os.path.expanduser('~')
-                 }/.Quick_Solver/{database_name}", key, data)
+                 }/.qsi/{database_name}", key, data)
 
 
 def get(key: str,
         database_name: str):
 
     database_name += '.json'
-    if os.path.exists(f"{os.path.expanduser('~')}/.Quick_Solver/{database_name}"):
-        with open(f"{os.path.expanduser('~')}/.Quick_Solver/{database_name}") as f:
+    if os.path.exists(f"{os.path.expanduser('~')}/.qsi/{database_name}"):
+        with open(f"{os.path.expanduser('~')}/.qsi/{database_name}") as f:
             full_data = json.load(f)
         if not full_data:
             raise KeyError("Database is empty.")
@@ -212,7 +212,7 @@ def log_in():
 
 def leaderboard(name):
     global SCORE
-    with open(f"{os.path.expanduser('~')}/.Quick_Solver/quick_solver_scores.json") as f:
+    with open(f"{os.path.expanduser('~')}/.qsi/quick_solver_scores.json") as f:
         data = json.load(f)
     data[name] = str(int(data[name]) + SCORE)
     data = {k: int(v) for k, v in data.items()}

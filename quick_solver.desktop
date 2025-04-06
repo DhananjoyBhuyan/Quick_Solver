@@ -1,5 +1,5 @@
 [Desktop Entry]
-Version=1.1.6
+Version=1.1.7
 Name=Quick Solver
 Exec=python3 $HOME/.Quick_Solver/quick_solver.py && bash
 Terminal=true

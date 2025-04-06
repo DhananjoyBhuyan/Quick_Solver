@@ -1,2 +1,2 @@
-What's new!!
-Added a new scoring system in which the scores and the usernames are not lost after updating, the game starts fresh, but the scores and usernames are not reset after an update.
+What's new in v1.1.8!!
+Now, the division questions won't be easy in different levels, the difficulty of the division questions will also change, earlier division had the same difficulty in different levels

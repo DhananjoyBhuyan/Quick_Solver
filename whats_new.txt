@@ -10,8 +10,8 @@ What's new in v1.1.8 (fully stable, tested, and ready for use!)
  Instead of updating like before, please:
 1. Open your File Explorer
 2. Delete the old installer file
-3. Download the new installer file (like before)
-4. Run it again. That's it!
+3. Download the new installer file (like before) 
+4. Run it again. That's it! No more extra steps.
 
 
 

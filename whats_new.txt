@@ -2,13 +2,17 @@
 
 
 
-What's new in v1.1.8 (fully stable and tested ready for use now!!)!!
-Now, the division questions won't be easy in different levels, the difficulty of the division questions will also change, earlier division had the same difficulty in different levels.
+What's new in v1.1.8 (fully stable, tested, and ready for use!)
+
+- Division questions are now smarter! Difficulty scales across levels — no more easy division in higher levels!
+- The installer has changed, and some persistent files were updated in the source.
+
+ Instead of updating like before, please:
+1. Open your File Explorer
+2. Delete the old installer file
+3. Download the new installer file (like before)
+4. Run it again. That's it!
 
 
-This time things have changed: -
-This time we have changed the installer file and also some files which are persistent accross updates, So instead of saying yes below, just go to your "File Explorer" delete the old installer file, then download the new installer file just like you did before and run it. PLease!
 
-
-
-...........................................................................................
+...................................................................................

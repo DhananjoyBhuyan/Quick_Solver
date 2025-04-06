@@ -78,7 +78,7 @@ def check_updates():
     with open(f"{os.path.expanduser('~')}/.Quick_Solver/version.txt", "r") as f:
         current_version = f.read().strip()
     url = "https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/latest_version.txt"
-    
+
     response = requests.get(url)
 
     if response.status_code == 200:
@@ -112,7 +112,7 @@ def check_updates():
                         print("Updating.....")
                         os.system(os.path.expanduser(
                             "bash ~/.qsi/qsi4update.sh"))
-                    
+
                         sys.exit()
 
                 else:
@@ -124,16 +124,16 @@ def check_updates():
 def generate_questions(level: int = 1):
     operations = ["+", "-", "*", "/"]
     chosen_op = choice(operations)
-	level_ranges = {
-		1: (1, 9),
-		2: (10, 99),
-		3: (100, 999),
-		4: (1000, 9999),
-		5: (10000, 100000)
-	}
+    level_ranges = {
+        1: (1, 9),
+        2: (10, 99),
+        3: (100, 999),
+        4: (1000, 9999),
+        5: (10000, 100000)
+    }
 
     if chosen_op == '/':
-		min_a, max_b = level_ranges[level]
+        min_a, max_b = level_ranges[level]
         num2 = randint(min_a, max_b)
         num1 = num2*randint(min_a, max_b)
     else:
@@ -263,7 +263,8 @@ def play():
 
     if not os.path.exists(os.path.expanduser("~/.Quick_Solver/first.txt")):
         with open(os.path.expanduser("~/.Quick_Solver/first.txt"), "w") as f:
-            f.write("This file was created when the game was first launched on this device.")
+            f.write(
+                "This file was created when the game was first launched on this device.")
 
     print("\\:: Quick Solver ::/")
     print("Starting....")
@@ -339,7 +340,8 @@ def main():
             print("Error: INVALID INPUT, game crashed, restarting...")
             sleep(1.8)
             continue
-        again = input(f"Do you want to play again?\nSolve more {NAME}?? (Yes/No): ").lower().strip()
+        again = input(f"Do you want to play again?\nSolve more {
+                      NAME}?? (Yes/No): ").lower().strip()
         if 'no' in again or 'na' in again or 'nh' in again or again == "n" or 'nopy' in again:
             break
 

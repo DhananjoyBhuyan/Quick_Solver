@@ -331,8 +331,7 @@ def main():
             print("Error: INVALID INPUT, game crashed, restarting...")
             sleep(1.8)
             continue
-        again = input(f"Do you want to play again?\nSolve more {
-                      NAME}?? (Yes/No): ").lower().strip()
+        again = input(f"Do you want to play again?\nSolve more {NAME}?? (Yes/No): ").lower().strip()
         if 'no' in again or 'na' in again or 'nh' in again or again == "n" or 'nopy' in again:
             break
 

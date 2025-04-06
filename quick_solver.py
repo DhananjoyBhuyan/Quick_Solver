@@ -78,12 +78,19 @@ def check_updates():
     with open(f"{os.path.expanduser('~')}/.Quick_Solver/version.txt", "r") as f:
         current_version = f.read().strip()
     url = "https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/latest_version.txt"
+    
     response = requests.get(url)
 
     if response.status_code == 200:
         latest_version = response.text.strip()
 
         if latest_version != current_version:
+            url2 = "https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/whats_new.txt"
+            new = requests.get(url2)
+            if new.status_code == 200:
+                new = new.text.strip()
+            else:
+                new = "\n\nError: failed to fetch 'what's new' section, kindly check your internet connection, if your connection is good, continue by ignoring...\n\n"
             print()
             print("="*67)
             print()
@@ -91,6 +98,8 @@ def check_updates():
             print()
             print("Update Available!!")
             print(f"\nVersion {latest_version} is available.")
+            print()
+            print(new)
             while 1:
                 update = input(
                     "Do you want to update it?\n(Yes/No): ").lower().strip()

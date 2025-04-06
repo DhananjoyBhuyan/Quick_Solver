@@ -111,7 +111,8 @@ def check_updates():
                         print("Updating.....")
                         os.system(os.path.expanduser(
                             "bash ~/.qsi/qsi4update.sh"))
-                        break
+                    
+                        sys.exit()
 
                 else:
                     print("\nPlease enter either yes or no.\n")

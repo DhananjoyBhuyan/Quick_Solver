@@ -2,8 +2,8 @@
 
 
 
-What's new in v1.2.0-dev (under testing, buggy)
-Actually, your current version v1.1.9 also has a bug, so you need to update a little later, so in the v1.2.0 the bug is being fixed and is under testing.
+What's new in v1.2.0 (ready to release!!)
+Actually, version v1.1.9 has a bug, so you need to update the whole thing including the installer file, so in the v1.2.0 the bug is fixed.
 
 BIGG UPDATE!!
 -Added Badges feature which gives you bagdes based on your performance!!

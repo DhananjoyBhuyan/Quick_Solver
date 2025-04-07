@@ -2,13 +2,13 @@
 
 
 
-What's new in v1.2.0 (ready to release!!)
-Actually, version v1.1.9 has a bug, so you need to update the whole thing including the installer file, so in the v1.2.0 the bug is fixed.
+What's new in v1.2.1 (ready to use)
+Actually, versions v1.1.9 and v1.2.0-stable have bugs, so you need to update the whole thing, including the installer file. The bugs are fixed in v1.2.1.
 
 BIGG UPDATE!!
 -Added Badges feature which gives you bagdes based on your performance!!
 
-But instead of installing like before please:
+But instead of updating like before please:
 1. Go to your file explorer.
 2. Delete the old quick_solver_installer.sh file.
 3. Download and run the new one(Just like you downloaded before)

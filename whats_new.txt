@@ -2,17 +2,9 @@
 
 
 
-What's new in v1.1.8 (fully stable, tested, and ready for use!)
+What's new in v1.1.9
 
-- Division questions are now smarter! Difficulty scales across levels — no more easy division in higher levels!
-- The installer has changed, and some persistent files were updated in the source.
+BIGG UPDATE!!
+-Added Badges feature which gives you bagdes based on your performance!!
 
- Instead of updating like before, please:
-1. Open your File Explorer
-2. Delete the old installer file
-3. Download the new installer file (like before) 
-4. Run it again. That's it! No more extra steps.
-
-
-
-...................................................................................
+........................................................................

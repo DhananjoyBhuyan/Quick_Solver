@@ -255,60 +255,6 @@ def questions():
             continue
 
 
-def get_badge(name: str):
-    try:
-        best_time = get(name, "quick_times")
-        total_score = int(get(name, "quick_solver_scores")) + SCORE
-    except:
-        return  # No data for this user yet
-
-    new_badges = []
-    conditions = []
-
-    # Time-based badge
-    if best_time < 1.0:
-        new_badges.append("Speed Demon")
-        conditions.append("Completed in under 1 second")
-    elif best_time < 2.0:
-        new_badges.append("Fast Solver")
-        conditions.append("Completed in under 2 seconds")
-    elif best_time < 5.0:
-        new_badges.append("Decent Speed")
-        conditions.append("Completed in under 5 seconds")
-    else:
-        new_badges.append("Needs Practice")
-        conditions.append("Took longer than 5 seconds")
-
-    # Score-based badge
-    if total_score >= 10000:
-        new_badges.append("Ultimate Brain")
-        conditions.append("Scored 10,000+ points")
-    elif total_score >= 5000:
-        new_badges.append("Math Champ")
-        conditions.append("Scored 5,000+ points")
-    elif total_score >= 1000:
-        new_badges.append("Rising Star")
-        conditions.append("Scored 1,000+ points")
-    else:
-        new_badges.append("Beginner")
-        conditions.append("Scored below 1,000")
-
-    # Try to get existing badge list
-    try:
-        current_badges = get(name, "quick_badges")
-        conditions_fullfilled = get(name, "quick_conds")
-    except:
-        current_badges = []
-        conditions_fullfilled = []
-
-    # Add new badges and only their matching condition
-    for badge, cond in zip(new_badges, conditions):
-        if badge not in current_badges:
-            current_badges.append(badge)
-            conditions_fullfilled.append(cond)
-
-    store(current_badges, name, "quick_badges")
-    store(conditions_fullfilled, name, "quick_conds")
 
 
 def play():
@@ -377,31 +323,16 @@ Read the above points clearly, or you might screw up.\n""")
     print(f"\nTotal questions attempted: {ques}")
     sleep(1)
     if TIMES:
-        try:
-            best_time = get(name, "quick_times")
-            if min(TIMES) < best_time:
-                best_time = min(TIMES)
-                store(best_time, name, "quick_times")
-
-        except (KeyError, FileNotFoundError):
-            best_time = min(TIMES)
-            store(best_time, name, "quick_times")
+        
         print("\nToday's best time: ", min(TIMES))
         sleep(1)
-        print("\nBest time till today from day one: \n\t",
-              get(name, "quick_solver"), "\n\n")
+        
         sleep(1)
         print("\nAverage time: ", sum(TIMES)/len(TIMES))
         sleep(1)
         print("\nSlowest time: ", max(TIMES))
         sleep(1)
-    print("\n\nThe badges you have earned: ")
-    get_badge(name)
-    badges_earned = get(name, "quick_badges")
-    cff = get(name, "quick_conds")
-    for i, j in zip(badges_earned, cff):
-        print("\n\t- ", i, " | Condition: ", j, "\n")
-
+    
     leaderboard(name)
 
     store(str(int(get(name, "quick_solver_scores")) + SCORE),

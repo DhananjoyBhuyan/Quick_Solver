@@ -214,6 +214,9 @@ def log_in():
         print("\nNew user detected, creating account.....")
         sleep(1.5)
         store("0", name, 'quick_solver_scores')
+        store(float("inf"), name, "quick_times")
+        store(["None"], name, "quick_badges")
+        store("")
         print(f"\n\nHello {name}!!\n\n")
         sleep(1)
     return name
@@ -256,7 +259,7 @@ def questions():
 def get_badge(name: str):
     try:
         best_time = get(name, "quick_times")
-        total_score = get(name, "quick_solver_scores")
+        total_score = int(get(name, "quick_solver_scores")) + SCORE
     except:
         return  # No data for this user yet
 
@@ -380,6 +383,7 @@ Read the above points clearly, or you might screw up.\n""")
             if min(TIMES) < best_time:
                 best_time = min(TIMES)
                 store(best_time, name, "quick_times")
+
         except (KeyError, FileNotFoundError):
             best_time = min(TIMES)
             store(best_time, name, "quick_times")

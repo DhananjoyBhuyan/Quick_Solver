@@ -216,7 +216,6 @@ def log_in():
         store("0", name, 'quick_solver_scores')
         store(float("inf"), name, "quick_times")
         store(["None"], name, "quick_badges")
-        store("")
         print(f"\n\nHello {name}!!\n\n")
         sleep(1)
     return name

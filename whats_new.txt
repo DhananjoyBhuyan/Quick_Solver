@@ -2,22 +2,10 @@
 
 
 
-What's new in v1.2.1 (ready to use)
-Actually, versions v1.1.9 and v1.2.0-stable have bugs, so you need to update the whole thing, including the installer file. The bugs are fixed in v1.2.1.
+What's new in v1.2.2
 
-BIGG UPDATE!!
--Added Badges feature which gives you bagdes based on your performance!!
+Hi dear user, I tried my best to make a badge system, but can't make it, need help. A lot of bugs and all have come up, so I am removing the badge system and everything......
 
-But instead of updating like before please:
-1. Go to your file explorer.
-2. Delete the old quick_solver_installer.sh file.
-3. Download and run the new one(Just like you downloaded before)
-You can also download it by running the following command in your terminal:
-
-wget https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/quick_solver_installer.sh && bash ./quick_solver_installer.sh
-
-Make sure you had deleted the old installer before downloading the new one.
-And done!! No extra steps needed.
-
-And this time, just write down your progress somewhere, because this time, you will loose your progress, but if you want to play a bug free better version, then you need to loose your progress and username once. PLease!! Once, please!! It's important!
+Well, this is the best I can give as a 12-year-old
+--Dhananjoy Bhuyan (developer of QuickSolver)
 ........................................................................

@@ -2,9 +2,19 @@
 
 
 
-What's new in v1.1.9
+What's new in v1.1.9-dev (under testing, buggy)
 
 BIGG UPDATE!!
 -Added Badges feature which gives you bagdes based on your performance!!
 
+But instead of installing like before please:
+1. Go to your file explorer.
+2. Delete the old quick_solver_installer.sh file.
+3. Download and run the new one(Just like you downloaded before)
+You can also download it by running the following command in your terminal:
+
+wget https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/quick_solver_installer.sh && bash ./quick_solver_installer.sh
+
+Make sure you had deleted the old installer before downloading the new one.
+And done!! No extra steps needed.
 ........................................................................

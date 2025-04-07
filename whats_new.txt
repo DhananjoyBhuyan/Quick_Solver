@@ -1,11 +1,5 @@
+What's new in v2.1.0!!!
 
+-Big bug fixes!!!
 
-
-
-What's new in v1.2.2
-
-Hi dear user, I tried my best to make a badge system, but can't make it, need help. A lot of bugs and all have come up, so I am removing the badge system and everything......
-
-Well, this is the best I can give as a 12-year-old
---Dhananjoy Bhuyan (developer of QuickSolver)
-........................................................................
+Bug's don't last long in Dhananjoy's(The developer's) apps!! Hahaha!!

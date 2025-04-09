@@ -1,9 +1,6 @@
-What's new in v2.2.1!!! 
+What's new in v2.2.2!!! 
 BIG UPDATE
-Hi user!!
-I added a badge system which gives you a badge based on your performance!! Haha!
-
---Dhananjoy Bhuyan (The 12-year-old developer)
-
+Hello dear user!!
+This time the badge feature is improved, now it notifies you when you unlock a new badge!!
 
 ....................................................................

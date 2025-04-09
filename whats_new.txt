@@ -1,9 +1,8 @@
-What's new in v2.1.1!!!
+What's new in v2.2.1!!! 
+BIG UPDATE
+Hi user!!
+I added a badge system which gives you a badge based on your performance!! Haha!
 
--Big bug fixes!!!
-
-Bug's don't last long in Dhananjoy's(The developer's) apps!! Hahaha!!
-I notice bugs before they come in action!!
 --Dhananjoy Bhuyan (The 12-year-old developer)
 
 

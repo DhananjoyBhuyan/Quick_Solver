@@ -16,6 +16,7 @@ SCORE = 0
 CORRECT = 0
 TIMES = []
 NAME = None
+BADGE = None
 
 
 def _add2json(file_name: str,
@@ -202,10 +203,12 @@ def get_name():
 
 
 def log_in():
+    global BADGE
     name = get_name()
 
     try:
         score = get(name, "quick_solver_scores")
+        BADGE = get(name, "quick_badges")
         print("Logging in....")
         sleep(1.5)
         print(f"\nWelcome back {name} your current score is {score}\n")
@@ -214,8 +217,8 @@ def log_in():
         print("\nNew user detected, creating account.....")
         sleep(1.5)
         store("0", name, 'quick_solver_scores')
-        store(float("inf"), name, "quick_times")
-        store(["None"], name, "quick_badges")
+        BADGE = badges(name)
+        store(badges(name), name, "quick_badges")
         print(f"\n\nHello {name}!!\n\n")
         sleep(1)
     return name
@@ -255,6 +258,38 @@ def questions():
             continue
 
 
+def badges(name: str):
+    try:
+        score = int(get(name, "quick_solver_scores"))
+    except (KeyError, FileNotFoundError):
+        score = SCORE
+
+    if score >= 1200000:
+        return "MAX LEVEL SOLVER"
+    elif score >= 1000000:
+        return "Ultimate Pro Solver"
+    elif score >= 250000:
+        return "Immortal Solver"
+    elif score >= 100000:
+        return "Legend"
+    elif score >= 50000:
+        return "Score Machine"
+    elif score >= 20000:
+        return "Unstoppable"
+    elif score >= 10000:
+        return "Mastermind"
+    elif score >= 5000:
+        return "Speed Demon"
+    elif score >= 2500:
+        return "Math Warrior"
+    elif score >= 1000:
+        return "Quick Thinker"
+    elif score >= 500:
+        return "Rising Star"
+    elif score >= 100:
+        return "Newbie"
+    else:
+        return "No Badge Yet"
 
 
 def play():
@@ -310,11 +345,18 @@ Read the above points clearly, or you might screw up.\n""")
         sleep(1)
         raise ValueError("Invalid input was given.")
 
+    store(str(int(get(name, "quick_solver_scores")) + SCORE),
+          name, "quick_solver_scores")
+
+    BADGE = badges(name)
+    store(badges(name), name, "quick_badges")
     print("\nPlayer Name: ", name)
     sleep(1)
     print("\nToday's score: ", SCORE)
     sleep(1)
-    print("\nTotal score: ", int(get(name, "quick_solver_scores")) + SCORE)
+    print("\nTotal score: ", get(name, "quick_solver_scores"))
+    sleep(1)
+    print("\nPlayer badge: ", BADGE)
     sleep(1)
     print(f'\nAnswered correct: {CORRECT}/{ques}')
     sleep(1)
@@ -323,20 +365,17 @@ Read the above points clearly, or you might screw up.\n""")
     print(f"\nTotal questions attempted: {ques}")
     sleep(1)
     if TIMES:
-        
+
         print("\nToday's best time: ", min(TIMES))
         sleep(1)
-        
+
         sleep(1)
         print("\nAverage time: ", sum(TIMES)/len(TIMES))
         sleep(1)
         print("\nSlowest time: ", max(TIMES))
         sleep(1)
-    
-    leaderboard(name)
 
-    store(str(int(get(name, "quick_solver_scores")) + SCORE),
-          name, "quick_solver_scores")
+    leaderboard(name)
 
     NAME = name
 

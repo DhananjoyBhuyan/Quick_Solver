@@ -66,7 +66,7 @@ def want_desktop():
     nos = ["no", "nah", "nopy", "nh", "na"]
     for i in nos:
         if i in a:
-            print("Alright")
+            print("Alright\n\n")
             return None
     if a == 'n':
         print("Alright....")
@@ -293,6 +293,7 @@ def badges(name: str):
 
 
 def play():
+    global BADGE
     global CORRECT
     global SCORE
     global NAME
@@ -348,14 +349,17 @@ Read the above points clearly, or you might screw up.\n""")
     store(str(int(get(name, "quick_solver_scores")) + SCORE),
           name, "quick_solver_scores")
 
-    BADGE = badges(name)
-    store(badges(name), name, "quick_badges")
     print("\nPlayer Name: ", name)
     sleep(1)
     print("\nToday's score: ", SCORE)
     sleep(1)
     print("\nTotal score: ", get(name, "quick_solver_scores"))
     sleep(1)
+    if BADGE != badges(name):
+        print("\nNEW BADGE UNLOCKED!!!")
+        sleep(1)
+    BADGE = badges(name)
+    store(badges(name), name, "quick_badges")
     print("\nPlayer badge: ", BADGE)
     sleep(1)
     print(f'\nAnswered correct: {CORRECT}/{ques}')

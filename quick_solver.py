@@ -376,14 +376,23 @@ def badges(name: str):
 
 
 def play():
-    global BADGE
     global CORRECT
     global SCORE
     global NAME
+    global FORGIVEN
+    global BADGE
+    global Multiplier
+    global Bonus
+    global TIMES
 
     CORRECT = 0
     SCORE = 0
     TIMES = []
+    NAME = None
+    BADGE = None
+    FORGIVEN = None
+    Multiplier = 1
+    Bonus = 0
 
     if not os.path.exists(os.path.expanduser("~/.Quick_Solver/first.txt")):
         with open(os.path.expanduser("~/.Quick_Solver/first.txt"), "w") as f:

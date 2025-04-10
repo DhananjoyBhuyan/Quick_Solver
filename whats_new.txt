@@ -1,5 +1,7 @@
-What's new in v2.3.0!!! 
+What's new in v2.3.1!!! 
 BIG UPDATE
 Now, your badges are not just for showing!! Now they matter!! The Higher Badge you earn, the more rewards you get!!!!
+
+And some bugs were fixed.
 
 ....................................................................

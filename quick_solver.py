@@ -482,7 +482,7 @@ def main():
         try:
             play()
         except ValueError:
-            raise
+            print("Invalid input!!!! Game crashed, restarting.............")
             sleep(1.8)
             continue
         again = input(

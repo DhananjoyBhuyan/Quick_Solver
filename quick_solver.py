@@ -399,7 +399,7 @@ def play():
             f.write(
                 "This file was created when the game was first launched on this device.")
 
-    print("\\:: Quick Solver 2.3.0 ::/")
+    print("\\:: Quick Solver 2.3.1 ::/")
     sleep(0.2)
     print("Starting....")
     sleep(0.8)

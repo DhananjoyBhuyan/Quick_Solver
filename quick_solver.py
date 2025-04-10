@@ -17,6 +17,65 @@ CORRECT = 0
 TIMES = []
 NAME = None
 BADGE = None
+FORGIVEN = None
+Multiplier = 1
+Bonus = 0
+
+
+def badge_bonus(badge: str):
+    global FORGIVEN
+    global Multiplier
+    global Bonus
+    daily_login = {
+        "Newbie": 0,
+        "Rising Star": 0,
+        "Quick Thinker": 0,
+        "Math Warrior": 5,
+        "Speed Demon": 8,
+        "Mastermind": 10,
+        "Unstoppable": 15,
+        "Score Machine": 18,
+        "Legend": 20,
+        "Immortal Solver": 25,
+        "Ultimate Pro Solver": 30,
+        "MAX LEVEL SOLVER": 100
+    }
+
+    Bonus = daily_login[badge]
+
+    multipliers = {
+        "Newbie": 1.0,
+        "Rising Star": 1.0,
+        "Quick Thinker": 1.2,
+        "Math Warrior": 1.25,
+        "Speed Demon": 1.35,
+        "Mastermind": 1.45,
+        "Unstoppable": 1.5,
+        "Score Machine": 1.88,
+        "Legend": 2.0,
+        "Immortal Solver": 2.55,
+        "Ultimate Pro Solver": 3.0,
+        "MAX LEVEL SOLVER": 8.99
+    }
+
+    Multiplier = multipliers[badge]
+    if randint(1, 10) > 5:
+        immunity = {
+            "Newbie": 0,
+            "Rising Star": 0,
+            "Quick Thinker": 1,
+            "Math Warrior": 2,
+            "Speed Demon": 2,
+            "Mastermind": 3,
+            "Unstoppable": 4,
+            "Score Machine": 5,
+            "Legend": 10,
+            "Immortal Solver": 15,
+            "Ultimate Pro Solver": 20,
+            "MAX LEVEL SOLVER": 28,
+        }
+
+        FORGIVEN = immunity[badge]
 
 
 def _add2json(file_name: str,
@@ -39,8 +98,8 @@ def store(data,
           database_name: str):
     database_name += '.json'
 
-    _add2json(f"{os.path.expanduser('~')
-                 }/.qsi/{database_name}", key, data)
+    _add2json(
+        f"{os.path.expanduser('~')}/.qsi/{database_name}", key, data)
 
 
 def get(key: str,
@@ -152,6 +211,8 @@ def ask_and_calculate(level: int = 1):
     global SCORE
     global CORRECT
     global TIMES
+    global Multiplier
+    global FORGIVEN
 
     print("Question: -")
     question = generate_questions(level)
@@ -172,24 +233,31 @@ def ask_and_calculate(level: int = 1):
         print("\n")
         if time_taken < 1:
             print("Whoa!! You just did it under 1 second! Score + 100.")
-            SCORE += 100
+            SCORE += (100*Multiplier)
+
         elif time_taken < 2:
             print("Score + 50!! You did it under 2 seconds, wow!!")
-            SCORE += 50
+            SCORE += (50*Multiplier)
         elif time_taken < 3:
             print("Score + 10, time taken less than 3 seconds...")
-            SCORE += 10
+            SCORE += (10*Multiplier)
         elif time_taken < 5:
             print("Score + 8, time taken less than 5 seconds...")
-            SCORE += 8
+            SCORE += (8*Multiplier)
         elif time_taken < 10:
             print("Score + 5, time taken less than 10 seconds...")
-            SCORE += 5
+            SCORE += (5*Multiplier)
         else:
             print("Score + 1, VERY SLOW!! But it's okay practice will make you perfect.")
-            SCORE += 1
+            SCORE += (1*Multiplier)
     else:
-        print(f"Wrong answer!!\nThe correct answer was {answer}")
+        if FORGIVEN not in [None, 0]:
+            FORGIVEN -= 1
+            print(
+                f"\nWrong answer forgiven...Score + 2\nThe correct answer was {answer}")
+            SCORE += (2*Multiplier)
+        else:
+            print(f"Wrong answer!!\nThe correct answer was {answer}")
 
 
 def get_name():
@@ -204,6 +272,8 @@ def get_name():
 
 def log_in():
     global BADGE
+    global SCORE
+    global FORGIVEN
     name = get_name()
 
     try:
@@ -221,6 +291,20 @@ def log_in():
         store(badges(name), name, "quick_badges")
         print(f"\n\nHello {name}!!\n\n")
         sleep(1)
+    if BADGE != "No Badge Yet":
+        badge_bonus(BADGE)
+        print(f"{BADGE} Badge Daily Login Bonus:\n")
+        sleep(1)
+        print(f"Score + {Bonus}")
+        SCORE += Bonus
+        sleep(1)
+        print(
+            f"\n{BADGE} badge score multiplier: {Multiplier}, this means everytime you answer a question, your score gets multiplied by {Multiplier}!!")
+        sleep(1)
+        if FORGIVEN:
+            print(
+                f"\nIn this session, {FORGIVEN} wrong answers will be forgiven because you have a {BADGE} badge!!")
+            sleep(1)
     return name
 
 
@@ -228,8 +312,7 @@ def leaderboard(name):
     global SCORE
     with open(f"{os.path.expanduser('~')}/.qsi/quick_solver_scores.json") as f:
         data = json.load(f)
-    data[name] = str(int(data[name]) + SCORE)
-    data = {k: int(v) for k, v in data.items()}
+    data = {k: float(v) for k, v in data.items()}
     data = dict(sorted(data.items(), key=lambda x: x[1], reverse=True))
     if len(data.keys()) == 1:
         print("\n\nNOTE: More than one player can play on this device with different usernames, so the leader board doesn't have only one player to show!\n")
@@ -260,7 +343,7 @@ def questions():
 
 def badges(name: str):
     try:
-        score = int(get(name, "quick_solver_scores"))
+        score = float(get(name, "quick_solver_scores"))
     except (KeyError, FileNotFoundError):
         score = SCORE
 
@@ -307,7 +390,8 @@ def play():
             f.write(
                 "This file was created when the game was first launched on this device.")
 
-    print("\\:: Quick Solver ::/")
+    print("\\:: Quick Solver 2.2.3 ::/")
+    sleep(0.2)
     print("Starting....")
     sleep(0.8)
     name = log_in()
@@ -346,7 +430,7 @@ Read the above points clearly, or you might screw up.\n""")
         sleep(1)
         raise ValueError("Invalid input was given.")
 
-    store(str(int(get(name, "quick_solver_scores")) + SCORE),
+    store(str(float(get(name, "quick_solver_scores")) + SCORE),
           name, "quick_solver_scores")
 
     print("\nPlayer Name: ", name)
@@ -389,11 +473,11 @@ def main():
         try:
             play()
         except ValueError:
-            print("Error: INVALID INPUT, game crashed, restarting...")
+            raise
             sleep(1.8)
             continue
-        again = input(f"Do you want to play again?\nSolve more {
-                      NAME}?? (Yes/No): ").lower().strip()
+        again = input(
+            f"Do you want to play again?\nSolve more {NAME}?? (Yes/No): ").lower().strip()
         if 'no' in again or 'na' in again or 'nh' in again or again == "n" or 'nopy' in again:
             break
 

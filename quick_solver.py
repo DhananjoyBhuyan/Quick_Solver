@@ -293,23 +293,22 @@ def log_in():
         sleep(1)
     if BADGE != "No Badge Yet":
         badge_bonus(BADGE)
-        print(f"{BADGE} Badge Daily Login Bonus:\n")
+        print(f"'{BADGE}' Badge Login Bonus:\n")
         sleep(1)
         print(f"Score + {Bonus}")
         SCORE += Bonus
         sleep(1)
         print(
-            f"\n{BADGE} badge score multiplier: {Multiplier}, this means everytime you answer a question, your score gets multiplied by {Multiplier}!!")
+            f"\n'{BADGE}' badge score multiplier: {Multiplier}, this means everytime you answer a question, your score gets multiplied by {Multiplier}!!")
         sleep(1)
         if FORGIVEN:
             print(
-                f"\nIn this session, {FORGIVEN} wrong answers will be forgiven because you have a {BADGE} badge!!")
+                f"\nIn this session, {FORGIVEN} wrong answers will be forgiven because you have a '{BADGE}' badge!!")
             sleep(1)
     return name
 
 
-def leaderboard(name):
-    global SCORE
+def leaderboard(name: str):
     with open(f"{os.path.expanduser('~')}/.qsi/quick_solver_scores.json") as f:
         data = json.load(f)
     data = {k: float(v) for k, v in data.items()}
@@ -317,17 +316,55 @@ def leaderboard(name):
     if len(data.keys()) == 1:
         print("\n\nNOTE: More than one player can play on this device with different usernames, so the leader board doesn't have only one player to show!\n")
         print("Even you can compete with yourself with different usernames!!\n")
-    print("_"*67 + "\nLeaderboard:-")
-    print("_"*67)
+    print("_"*66 + "\nLeaderboard:-" + (" "*53) + "|")
+    print("_"*66 + "|")
     sleep(1)
+
     for idx, curname in enumerate(data, 1):
+        umcn = curname
         score = data[curname]
-        if curname == name:
-            print(f"| {idx} | {curname}(You)          score: {score}")
+        if len(curname) >= 16:
+            curname = curname[:13] + "..."
+
         else:
-            print(f'| {idx} | {curname}               score: {score}')
+            spaces_to_add = 16 - len(curname)
+            curname += (" "*spaces_to_add)
+
+        spaces_to_add2 = 66 - (2 + len(str(idx)) + 3 +
+                               len(curname) + 18 + len(str(score)))
+
+        if umcn == name:
+            print(f"| {idx} | {curname}(You)    | score: {score}", end="")
+            print(" "*spaces_to_add2 + "|")
+        else:
+            print(f'| {idx} | {curname}         | score: {score}', end="")
+            print(" "*spaces_to_add2 + "|")
         sleep(1)
-    print("_"*67 + "\n\n")
+    print("_"*66 + "|\n\n")
+
+    print("PLAYER BADGES: ")
+    sleep(1)
+    with open(os.path.expanduser("~/.qsi/quick_badges.json")) as f:
+        pbadges = json.load(f)
+    print("_"*66)
+    print("Badges:-" + " "*58 + "|")
+    print("_"*66 + "|")
+    sleep(1)
+    for idx, player in enumerate(pbadges, 1):
+        umpn = player
+        if len(player) >= 16:
+            player = player[:13] + "..."
+        else:
+            spaces_to_add = 16 - len(player)
+            player += (" "*spaces_to_add)
+
+        spaces_to_add2 = 66 - (2 + len(str(idx)) + 3 +
+                               len(player) + 13 + len(str(pbadges[umpn])) + 1)
+
+        print(f"| {idx} | {player}    | badge: {pbadges[umpn]} ", end="")
+        print(" "*spaces_to_add2 + "|")
+        sleep(1)
+    print("_"*66 + "|\n\n")
 
 
 def questions():
@@ -399,7 +436,7 @@ def play():
             f.write(
                 "This file was created when the game was first launched on this device.")
 
-    print("\\:: Quick Solver 2.3.1 ::/")
+    print("\\:: Quick Solver 2.5.0 ::/")
     sleep(0.2)
     print("Starting....")
     sleep(0.8)
@@ -485,8 +522,9 @@ def main():
             print("Invalid input!!!! Game crashed, restarting.............")
             sleep(1.8)
             continue
+
         again = input(
-            f"Do you want to play again?\nSolve more {NAME}?? (Yes/No): ").lower().strip()
+            "Do you want to play again?\nSolve more?? ([Yes]/No): ").lower().strip()
         if 'no' in again or 'na' in again or 'nh' in again or again == "n" or 'nopy' in again:
             break
 

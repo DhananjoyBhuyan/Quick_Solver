@@ -1,7 +1,5 @@
-What's new in v2.3.2!!! 
+What's new in v2.5.0!!! 
 BIG UPDATE
-Now, your badges are not just for showing!! Now they matter!! The Higher Badge you earn, the more rewards you get!!!!
-
-And some bugs were fixed.
+Now you can view the badges of other players, leaderboard is printed nicely and looks like a table, bug fixes and a lot of hidden things have been done!! Play the game with this update, you'll be totally amazed!!!
 
 ....................................................................

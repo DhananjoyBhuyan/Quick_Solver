@@ -220,7 +220,7 @@ def ask_and_calculate(level: int = 1):
 
     print("\n"+question+"\n")
     start = time()
-    user_answer = input("Your answer: ")
+    user_answer = input("Your answer: ").strip()
     end = time()
 
     if user_answer == answer:

@@ -1,5 +1,3 @@
-What's new in v2.5.0!!! 
-BIG UPDATE
-Now you can view the badges of other players, leaderboard is printed nicely and looks like a table, bug fixes and a lot of hidden things have been done!! Play the game with this update, you'll be totally amazed!!!
-
+What's new in v2.5.1!!! 
+bug fix.
 ....................................................................

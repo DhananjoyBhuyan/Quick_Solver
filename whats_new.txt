@@ -1,3 +1,5 @@
-What's new in v2.5.2!!! 
-bug fix.
+What's new in v2.6.0!!! 
+BIG UPDATE!!
+
+Now you can view which badge you'll earn next!
 ....................................................................

@@ -20,6 +20,19 @@ BADGE = None
 FORGIVEN = None
 Multiplier = 1
 Bonus = 0
+Badges_scores = {'Newbie': 100,
+                 'Rising Star': 500,
+                 'Quick Thinker': 1000,
+                 'Math Warrior': 2500,
+                 'Speed Demon': 5000,
+                 'Mastermind': 10000,
+                 'Unstoppable': 20000,
+                 'Score Machine': 50000,
+                 'Legend': 100000,
+                 'Immortal Solver': 250000,
+                 'Ultimate Pro Solver': 1000000,
+                 'MAX LEVEL SOLVER': 1200000,
+                 'No more badges, you already reached MAX LEVEL. More badges will be added later on in updates.': None}
 
 
 def badge_bonus(badge: str):
@@ -421,6 +434,7 @@ def play():
     global Multiplier
     global Bonus
     global TIMES
+    global Badges_scores
 
     CORRECT = 0
     SCORE = 0
@@ -436,7 +450,7 @@ def play():
             f.write(
                 "This file was created when the game was first launched on this device.")
 
-    print("\\:: Quick Solver 2.5.2 ::/")
+    print("\\:: Quick Solver 2.6.0 ::/")
     sleep(0.2)
     print("Starting....")
     sleep(0.8)
@@ -491,6 +505,16 @@ Read the above points clearly, or you might screw up.\n""")
     BADGE = badges(name)
     store(badges(name), name, "quick_badges")
     print("\nPlayer badge: ", BADGE)
+    badge_list = list(Badges_scores.keys())
+    nt_badge = badge_list[badge_list.index(BADGE) + 1]
+    score_needed = Badges_scores[nt_badge]
+    sleep(1)
+    if score_needed:
+        print(
+            f"\nNext Badge comming: '{nt_badge}' (minimum score needed: {score_needed})")
+    else:
+        print(f'\nNext badge comming: {nt_badge}')
+
     sleep(1)
     print(f'\nAnswered correct: {CORRECT}/{ques}')
     sleep(1)

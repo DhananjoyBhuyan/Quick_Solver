@@ -1,3 +1,3 @@
-What's new in v2.6.1!!! 
+What's new in v2.6.2!!! 
 Bug fixes. By the way, your game will never crash now if you give invalid input!
 ....................................................................

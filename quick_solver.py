@@ -20,7 +20,8 @@ BADGE = None
 FORGIVEN = None
 Multiplier = 1
 Bonus = 0
-Badges_scores = {'Newbie': 100,
+Badges_scores = {'No Badge Yet': 0,
+                 'Newbie': 100,
                  'Rising Star': 500,
                  'Quick Thinker': 1000,
                  'Math Warrior': 2500,
@@ -450,13 +451,15 @@ def play():
             f.write(
                 "This file was created when the game was first launched on this device.")
 
-    print("\\:: Quick Solver 2.6.0 ::/")
+    print("\\:: Quick Solver 2.6.2 ::/")
     sleep(0.2)
     print("Starting....")
     sleep(0.8)
     name = log_in()
 
-    level = input("""
+    while 1:
+
+        level = input("""
 Which level of questions do you want?
 1. Beginner
 2. Intermediate
@@ -465,10 +468,13 @@ Which level of questions do you want?
 5. Legend
 Enter level number (1-5): """).strip()
 
-    if level in "1 2 3 4 5".split(" "):
-        ques = questions()
+        if level in "1 2 3 4 5".split(" "):
+            break
+        else:
+            print("\nPLease enter a number 1-5, Invalid input.\n")
+    ques = questions()
 
-        print("""
+    print("""
 Points to remember:-
 
 1. "*" means multiply
@@ -476,19 +482,14 @@ Points to remember:-
 
 Read the above points clearly, or you might screw up.\n""")
 
-        for i in range(5, 0, -1):
-            sleep(1)
-            sys.stdout.write(f"\r We are starting in {i:.0f}")
-        print()
-
-        for _ in range(ques):
-            ask_and_calculate(int(level))
-            sleep(1.5)
-
-    else:
-        print("\nYou should've entered a level number from 1 to 5..\n")
+    for i in range(5, 0, -1):
         sleep(1)
-        raise ValueError("Invalid input was given.")
+        sys.stdout.write(f"\r We are starting in {i:.0f}")
+    print()
+
+    for _ in range(ques):
+        ask_and_calculate(int(level))
+        sleep(1.5)
 
     store(str(float(get(name, "quick_solver_scores")) + SCORE),
           name, "quick_solver_scores")

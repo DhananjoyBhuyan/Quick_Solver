@@ -1,3 +1,13 @@
-What's new in v2.6.2!!! 
-Bug fixes. By the way, your game will never crash now if you give invalid input!
+What's new in v3.0.0:
+This is totally different now!! You have a TUI(Terminal User Interface) Now which uses ascii art... Now it looks like a website or real game with textboxes and buttons rather than raw input prompts!! It's Kind of like:
+
++-----------------------+
+|   Quick Solver 3.0.0  |
+|                       |
+|    +------------+     |
+|    |Enter text..|     |
+|    +------------+     |
++-----------------------+
+Not exactly like this, way better than this, but you get the idea right?? It looks awesome, better UI(User Interface) and UX(User eXperience)!!!!!!!!!
+
 ....................................................................

@@ -2,6 +2,7 @@
 # Download the `quick_solver_installer.sh` file, then open your terminal and run the following to install the game:-
 ```bash
 bash /path/to/quick_solver_installer.sh
+python3 -m pip install art
 ```
 ### if you see a ❌ mark on the app icon on your desktop screen.
 #### That means you chose the option for the game icon to appear on your desktop:

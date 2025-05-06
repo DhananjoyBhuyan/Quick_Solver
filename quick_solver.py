@@ -1,30 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu May  1 12:55:54 2025
+Created on Wed Mar 26 03:32:08 2025
 
-Created by: Dhananjoy Bhuyan
+@author: Dhananjoy Bhuyan
 """
-import sys
-import tty
-import termios
-import os
+import requests
 from random import randint, choice
 from time import time, sleep
-import requests
+import sys
 import json
-from shutil import get_terminal_size
-from string import ascii_letters, digits, punctuation
-try:
-    from art import text2art
-except ImportError:
-    os.system('python3 -m pip install art')
-    os.system('python -m pip install art')
-    from art import text2art
+import os
 
 SCORE = 0
 CORRECT = 0
 TIMES = []
+NAME = None
 BADGE = None
 FORGIVEN = None
 Multiplier = 1
@@ -45,69 +36,9 @@ Badges_scores = {'No Badge Yet': 0,
                  'No more badges, you already reached MAX LEVEL. More badges will be added later on in updates.': None}
 
 
-def generate_questions(level: int = 1):
-    operations = ["+", "-", "*", "/"]
-    chosen_op = choice(operations)
-    level_ranges = {
-        1: (1, 9),
-        2: (10, 99),
-        3: (100, 999),
-        4: (1000, 9999),
-        5: (10000, 100000)
-    }
-
-    if chosen_op == '/':
-        min_a, max_b = level_ranges[level]
-        num2 = randint(min_a, max_b)
-        num1 = num2*randint(min_a, max_b)
-    else:
-        num1 = ""
-        num2 = ""
-        for i in range(level):
-            num1 += str(randint(1, 9))
-            num2 += str(randint(1, 9))
-    expression = f"{num1} {chosen_op} {num2}"
-    return expression
-
-
-def badges(name: str):
-    try:
-        score = float(get(name, "quick_solver_scores"))
-    except (KeyError, FileNotFoundError):
-        score = SCORE
-
-    if score >= 1200000:
-        return "MAX LEVEL SOLVER"
-    elif score >= 1000000:
-        return "Ultimate Pro Solver"
-    elif score >= 250000:
-        return "Immortal Solver"
-    elif score >= 100000:
-        return "Legend"
-    elif score >= 50000:
-        return "Score Machine"
-    elif score >= 20000:
-        return "Unstoppable"
-    elif score >= 10000:
-        return "Mastermind"
-    elif score >= 5000:
-        return "Speed Demon"
-    elif score >= 2500:
-        return "Math Warrior"
-    elif score >= 1000:
-        return "Quick Thinker"
-    elif score >= 500:
-        return "Rising Star"
-    elif score >= 100:
-        return "Newbie"
-    else:
-        return "No Badge Yet"
-
-
 def badge_bonus(badge: str):
     global FORGIVEN
     global Multiplier
-    global SCORE
     global Bonus
     daily_login = {
         "Newbie": 0,
@@ -123,8 +54,8 @@ def badge_bonus(badge: str):
         "Ultimate Pro Solver": 30,
         "MAX LEVEL SOLVER": 100
     }
+
     Bonus = daily_login[badge]
-    SCORE += daily_login[badge]
 
     multipliers = {
         "Newbie": 1.0,
@@ -202,411 +133,196 @@ def get(key: str,
         raise FileNotFoundError("Database not found.")
 
 
-def get_key() -> str:
-    fd = sys.stdin.fileno()
-    old_settings = termios.tcgetattr(fd)
-
-    try:
-        tty.setraw(fd)             # Turn off buffering
-        key = sys.stdin.read(1)    # Read 1 character
-    finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-
-    return key
-
-
-def print_screen(screen: list[list[str]]) -> None:
-    for row in screen:
-        print(''.join(row))
+def want_desktop():
+    print("Do you want the game icon to appear in the desktop as well?")
+    a = input("Yes/No (default is yes): ").lower().strip()
+    nos = ["no", "nah", "nopy", "nh", "na"]
+    for i in nos:
+        if i in a:
+            print("Alright\n\n")
+            return None
+    if a == 'n':
+        print("Alright....")
+        return None
+    os.system(os.path.expanduser("bash ~/.qsi/qsi4dsktp.sh"))
 
 
-def make_border(frame: list[list[str]]) -> None:
-    frame[0] = ['-']*len(frame[0])
-    frame[-1] = ['-']*len(frame[0])
+def check_updates():
 
-    for row in range(len(frame)):
+    with open(f"{os.path.expanduser('~')}/.Quick_Solver/version.txt", "r") as f:
+        current_version = f.read().strip()
+    url = "https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/latest_version.txt"
 
-        frame[row][0], frame[row][-1] = '|', '|'
-    for row, col in [(0, 0), (-1, 0), (0, -1), (-1, -1)]:
-        frame[row][col] = '+'
+    response = requests.get(url)
 
+    if response.status_code == 200:
+        latest_version = response.text.strip()
 
-def make_box(screen: list[list[str]], row: int, col: int, width: int, height: int) -> None:
-    box = [[' ' for _ in range(width)] for _ in range(height)]
-    make_border(box)
-    for i in range(height):
-        for j in range(width):
-            screen[row + i][col + j] = box[i][j]
-    del box
+        if latest_version != current_version:
+            url2 = "https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/whats_new.txt"
+            new = requests.get(url2)
+            if new.status_code == 200:
+                new = new.text.strip()
+            else:
+                new = "\n\nError: failed to fetch 'what's new' section, kindly check your internet connection, if your connection is good, continue by ignoring...\n\n"
+            print()
+            print("="*67)
+            print()
+            print("\\:: IMPORTANT NOTE ::/")
+            print()
+            print("Update Available!!")
+            print(f"\nVersion {latest_version} is available.")
+            print()
+            print("Your currently installed version: ", current_version)
+            print()
+            print(new)
+            while 1:
+                update = input(
+                    "Do you want to update it?\n(Yes/No): ").lower().strip()
+                if update:
+                    if 'no' in update.lower() or 'nope' in update or 'nah' in update or 'nopy' in update or update == 'no' or update == 'n' or 'nh' in update:
+                        print("Alright.")
+                        break
+                    else:
+                        print("Updating.....")
+                        os.system(os.path.expanduser(
+                            "bash ~/.qsi/qsi4update.sh"))
 
+                        sys.exit()
 
-def insert_text(frame: list[list[str]], text: str, row: int, col: int) -> None:
-    sw = len(frame[0]) - 1
-    sh = len(frame) - 1
-    r = row
-    c = col
-    for ch in text:
-        if r >= sh:
-            break
-        frame[r][c] = ch
-        c += 1
-        if c >= sw:
-            c = 2
-            r += 1
-
-
-def insert_text_in_box(frame: list[list[str]], text: str, box_row: int, box_col: int, box_width: int, box_height: int) -> None:
-    box = [[' ' for _ in range(box_width)] for _ in range(box_height)]
-    make_border(box)
-    insert_text(box, text, 1, 1)
-    for i in range(box_height):
-        for j in range(box_width):
-            frame[box_row + i][box_col + j] = box[i][j]
-    del box
-
-
-def dynamic_text(frame: list[list[str]], text: str, row: int, col: int) -> None:
-    r = row
-    c = col
-    for ch in text:
-        os.system('clear')
-        if c >= len(frame[0]) - 1:
-            r += 1
-            c = 2
-        if r >= len(frame) - 1:
-            break
-        frame[r][c] = ch
-        print_screen(frame)
-        c += 1
-        sleep(0.08)
-    os.system('clear')
-
-
-def make_screen(width: int, height: int) -> list[list[str]]:
-    scr = [[' ' for _ in range(width)] for _ in range(height - 1)]
-    make_border(scr)
-    insert_text(scr, "\\:: Quick Solver 3.0.0 ::/",
-                2, len(scr[0])//2 - 13)
-    return scr
-
-
-def set_visible(text: str, placeholder: str) -> str:
-    visible_length = len(placeholder) + 1
-    if not text:
-        return '█' + placeholder
+                else:
+                    print("\nPlease enter either yes or no.\n")
     else:
-        if len(text) > visible_length:
-            return text[-visible_length] + '█'
+        print("\n\nError: Couldn't check for updates, if you internet is not turned on then please connect to internet.. if you're already connected to internet, then continue by ignoring this message....\n\n")
+
+
+def generate_questions(level: int = 1):
+    operations = ["+", "-", "*", "/"]
+    chosen_op = choice(operations)
+    level_ranges = {
+        1: (1, 9),
+        2: (10, 99),
+        3: (100, 999),
+        4: (1000, 9999),
+        5: (10000, 100000)
+    }
+
+    if chosen_op == '/':
+        min_a, max_b = level_ranges[level]
+        num2 = randint(min_a, max_b)
+        num1 = num2*randint(min_a, max_b)
+    else:
+        num1 = ""
+        num2 = ""
+        for i in range(level):
+            num1 += str(randint(1, 9))
+            num2 += str(randint(1, 9))
+    expression = f"{num1} {chosen_op} {num2}"
+    return expression
+
+
+def ask_and_calculate(level: int = 1):
+    global SCORE
+    global CORRECT
+    global TIMES
+    global Multiplier
+    global FORGIVEN
+
+    print("Question: -")
+    question = generate_questions(level)
+    answer = str(int(eval(question)))
+
+    print("\n"+question+"\n")
+    start = time()
+    user_answer = input("Your answer: ").strip()
+    end = time()
+
+    if user_answer == answer:
+        print("Correct!!")
+        time_taken = end - start
+        TIMES.append(float(f"{time_taken:.3f}"))
+        print(f'You took: {time_taken:.3f} seconds!!')
+        sleep(1)
+        CORRECT += 1
+        print("\n")
+        if time_taken < 1:
+            print("Whoa!! You just did it under 1 second! Score + 100.")
+            SCORE += (100*Multiplier)
+
+        elif time_taken < 2:
+            print("Score + 50!! You did it under 2 seconds, wow!!")
+            SCORE += (50*Multiplier)
+        elif time_taken < 3:
+            print("Score + 10, time taken less than 3 seconds...")
+            SCORE += (10*Multiplier)
+        elif time_taken < 5:
+            print("Score + 8, time taken less than 5 seconds...")
+            SCORE += (8*Multiplier)
+        elif time_taken < 10:
+            print("Score + 5, time taken less than 10 seconds...")
+            SCORE += (5*Multiplier)
         else:
-            return text[:] + '█'
+            print("Score + 1, VERY SLOW!! But it's okay practice will make you perfect.")
+            SCORE += (1*Multiplier)
+    else:
+        if FORGIVEN not in [None, 0]:
+            FORGIVEN -= 1
+            print(
+                f"\nWrong answer forgiven...Score + 2\nThe correct answer was {answer}")
+            SCORE += (2*Multiplier)
+        else:
+            print(f"Wrong answer!!\nThe correct answer was {answer}")
 
 
-def username() -> str:
-    global BADGE
-    name = ""
-    visible = None
-
-    os.system('clear')
+def get_name():
     while 1:
-
-        scr_width, scr_height = get_terminal_size(fallback=(80, 24))
-
-        screen = make_screen(scr_width, scr_height)
-        visible = set_visible(name, 'Enter you username...')
-        insert_text_in_box(screen, visible, len(screen) //
-                           2 - 1, len(screen[0])//2 - 12, 24, 3)
-
-        insert_text(screen, "Username:", len(
-            screen)//2 - 2, len(screen[0])//2 - 4)
-
-        print_screen(screen)
-        key = get_key()
-        if key == '\x7f':
-            os.system('clear')
-            if name:
-                name = name[:-1]
-        elif key == '\r' or key == '\n':
-            if name:
-                break
-        elif key in ascii_letters + digits + ' ' + punctuation:
-            os.system('clear')
-            name += key
+        name = input("Enter your username: ")
+        if not name:
+            print("Please enter your username.")
+            continue
         else:
-            os.system('clear')
+            return name
+
+
+def log_in():
+    global BADGE
+    global SCORE
+    global FORGIVEN
+    name = get_name()
+
     try:
         score = get(name, "quick_solver_scores")
-        badge = get(name, "quick_badges")
-        os.system('clear')
-        width, height = get_terminal_size(fallback=(80, 24))
-        screen = make_screen(width, height)
-        insert_text(screen, "Welcome Back!!", 4, len(screen[0])//2 - 7)
-        dynamic_text(
-            screen, f"Hi {name}! Your current score is: {score}", 6, 2)
-        insert_text(screen, f"Current Badge: {badge}", 7, 2)
-        BADGE = badge
-        if BADGE != 'No Badge Yet':
-            badge_bonus(BADGE)
-            insert_text(screen, 'Badge Bonus:', 9, len(screen[0])//2 - 6)
-            dynamic_text(screen, f'Login Bonus: score + {Bonus}', 11, 2)
-            dynamic_text(screen,
-                         f'Score Multiplier: {Multiplier}', 12, 2)
-            dynamic_text(
-                screen, 'This means each time you answer a question, ', 13, 2)
-            dynamic_text(screen,
-                         f'the score you get will be multiplied by {Multiplier}', 14, 2)
-
-            if FORGIVEN not in [None, 0]:
-                insert_text(screen,
-                            'In this session, ', 16, 2)
-                dynamic_text(
-                    screen, f'{FORGIVEN} wrong answers will be forgiven because you have a "{BADGE}" badge.', 17, 2)
-
-    except (KeyError, FileNotFoundError):
-        width, height = get_terminal_size(fallback=(80, 24))
-        screen = make_screen(width, height)
-        dynamic_text(screen, 'New user detected...', 4, len(screen[0])//2 - 10)
-        dynamic_text(screen, f'Hello {name}!!', 6, 2)
-        store('0', name, "quick_solver_scores")
-        store("No Badge Yet", name, "quick_badges")
-
-    insert_text(screen, 'Press any key to proceed.', len(screen) - 3, 2)
-
-    print_screen(screen)
-    get_key()
-
+        BADGE = get(name, "quick_badges")
+        print("Logging in....")
+        sleep(1.5)
+        print(f"\nWelcome back {name} your current score is {score}\n")
+        sleep(1)
+    except:
+        print("\nNew user detected, creating account.....")
+        sleep(1.5)
+        store("0", name, 'quick_solver_scores')
+        BADGE = badges(name)
+        store(badges(name), name, "quick_badges")
+        print(f"\n\nHello {name}!!\n\n")
+        sleep(1)
+    if BADGE != "No Badge Yet":
+        badge_bonus(BADGE)
+        print(f"'{BADGE}' Badge Login Bonus:\n")
+        sleep(1)
+        print(f"Score + {Bonus}")
+        SCORE += Bonus
+        sleep(1)
+        print(
+            f"\n'{BADGE}' badge score multiplier: {Multiplier}, this means everytime you answer a question, your score gets multiplied by {Multiplier}!!")
+        sleep(1)
+        if FORGIVEN:
+            print(
+                f"\nIn this session, {FORGIVEN} wrong answers will be forgiven because you have a '{BADGE}' badge!!")
+            sleep(1)
     return name
 
 
-def draw_button(screen: list[list[str]], text: str, row: int, col: int, focused: bool) -> None:
-    button = [[' ' for _ in range(len(text) + 4)] for _ in range(3)]
-    insert_text(button, f"[{text}]", 1, 1)
-    if focused:
-        make_border(button)
-
-    for i in range(len(button)):
-        for j in range(len(button[0])):
-            screen[row + i][col + j] = button[i][j]
-    del button
-
-
-def level() -> int:
-    focus = 0
-    buttons = {0: 'lvl 1: Beginner',
-               1: 'lvl 2: Intermediate',
-               2: 'lvl 3: Pro',
-               3: 'lvl 4: Master',
-               4: 'lvl 5: Legend'
-               }
-
-    os.system('clear')
-    width, height = get_terminal_size(fallback=(80, 24))
-
-    screen = make_screen(width, height)
-    insert_text(
-        screen, 'Now you are going to choose a level to play.', 4, 2)
-    insert_text(
-        screen, 'Remember that Higher level means Harder Questions.', 5, 2)
-    insert_text(
-        screen, 'For choosing, use arrow keys to navigate to a button. And Press "enter" to click on the button.', 7, 2)
-    insert_text(
-        screen, 'When a button is selected, a box will be drawn around it...if it is not selected it will be just like: [button text] (Wrapped in []) The OK button below is selected. Now press Enter!!', 9, 2)
-    insert_text_in_box(screen, '[OK]', 12, len(screen[0])//2 - 3, 6, 3)
-    print_screen(screen)
-    get_key()
-
-    while 1:
-        os.system('clear')
-
-        screen = make_screen(get_terminal_size(fallback=(80, 24)).columns, 22)
-
-        insert_text(screen, 'Choose Level', 4, len(screen[0])//2 - 6)
-
-        brow = 5
-
-        for idx, b in enumerate(buttons.keys()):
-
-            draw_button(screen, buttons[b], brow, 2, focused=(idx == focus))
-            brow += 3
-        print_screen(screen)
-        key = get_key()
-        if key == '\x1b':
-            get_key()
-            key = get_key()
-            if key == 'A':
-                if focus > 0:
-                    focus -= 1
-                    continue
-            elif key == 'B':
-                if focus < len(buttons) - 1:
-                    focus += 1
-                    continue
-        elif key == '\r' or key == '\n':
-            return focus + 1
-        else:
-            continue
-
-
-def questions() -> int:
-    noq = ""
-
-    while 1:
-        os.system('clear')
-        width, height = get_terminal_size(fallback=(80, 24))
-
-        screen = make_screen(width, height)
-
-        insert_text(
-            screen, 'How many questions will you answer in this session?', 4, 2)
-        insert_text(
-            screen, '**Please note that you only have to enter an integer.**', 6, 2)
-        insert_text(screen, 'Number of Questions:', 7, len(screen[0])//2 - 10)
-        insert_text_in_box(screen, set_visible(noq, 'Enter number of questions....'), 8,
-                           len(screen[0])//2 - 16, 32, 3)
-        print_screen(screen)
-        key = get_key()
-        if key in digits:
-            noq += key
-        elif key == '\r' or key == '\n':
-            if noq:
-                return int(noq)
-        elif key == '\x7f':
-            if noq:
-                noq = noq[:-1]
-        else:
-            pass
-
-
-def ask_and_calculate(level: int, qn: int, ques: int) -> None:
-    global SCORE, FORGIVEN, TIMES, Multiplier, CORRECT
-
-    question = generate_questions(level)
-    answer = int(eval(question))
-    user_answer = ""
-    start = time()
-    while 1:
-        os.system('clear')
-        size = get_terminal_size(fallback=(80, 24))
-        screen = make_screen(*size)
-        insert_text(screen, f'Question: {qn}/{ques}', 3, 2)
-        insert_text(screen, question, 4, len(
-            screen[0])//2 - (len(question)//2))
-        insert_text(screen, 'Your answer:', 6, len(screen[0])//2 - 6)
-        visible = set_visible(user_answer, "Enter your answer....")
-        insert_text_in_box(screen, visible, 8, len(screen[0])//2 - 12, 24, 3)
-        print_screen(screen)
-
-        key = get_key()
-        if key in digits + '-':
-            user_answer += key
-        elif key == '\x7f':
-            if user_answer:
-                user_answer = user_answer[:-1]
-        elif key == '\r' or key == '\n':
-            if not user_answer:
-                continue
-            end = time()
-            user_answer = int(user_answer)
-            break
-        else:
-            pass
-
-    if user_answer == answer:
-        os.system('clear')
-        size = get_terminal_size(fallback=(80, 24))
-        screen = make_screen(*size)
-        time_taken = end - start
-        TIMES.append(float(f'{time_taken:.3f}'))
-        CORRECT += 1
-        x = text2art("CORRECT").splitlines()
-        yay = [[j for j in i] for i in x]
-        for i in range(len(yay)):
-            for j in range(len(yay[0])):
-                screen[4 + i][2 + j] = yay[i][j]
-        dynamic_text(screen, f'You took {time_taken:.3f} seconds!', 10, 5)
-        os.system('clear')
-        if time_taken < 1:
-            insert_text(
-                screen, 'Whoa!! You just did it under 1 second! Score + 100', 12, 2)
-            SCORE += (100*Multiplier)
-        elif time_taken < 2:
-            insert_text(
-                screen, 'Awesome! You just did it under 2 seconds. Score + 50', 12, 2)
-            SCORE += (50*Multiplier)
-        elif time_taken < 3:
-            insert_text(
-                screen, 'time taken less than 3 seconds. Score + 10', 12, 2)
-            SCORE += (10*Multiplier)
-        elif time_taken < 5:
-            insert_text(
-                screen, "Score + 8, time taken less than 5 seconds...", 12, 2)
-            SCORE += (8*Multiplier)
-        elif time_taken < 10:
-            insert_text(
-                screen, "Score + 5, time taken less than 10 seconds...", 12, 2)
-            SCORE += (5*Multiplier)
-        else:
-            insert_text(
-                screen, "Score + 1, VERY SLOW!! But it's okay practice will make you perfect.", 12, 2)
-            SCORE += (1*Multiplier)
-
-        print_screen(screen)
-    else:
-        os.system('clear')
-        width, height = get_terminal_size(fallback=(80, 24))
-        screen = make_screen(width, height)
-        x = text2art("WRONG").splitlines()
-        boo = [[j for j in i] for i in x]
-        for i in range(len(boo)):
-            for j in range(len(boo[0])):
-                screen[4 + i][2 + j] = boo[i][j]
-        dynamic_text(screen,
-                     f'Wrong answer! The correct answer was {answer}', 10, 5)
-
-        if FORGIVEN not in [0, None]:
-            FORGIVEN -= 1
-            dynamic_text(
-                screen, "It's alright, wrong answer forgiven because of your '{BADGE}' badge. Score + 5", 12, 2)
-            SCORE += (5*Multiplier)
-        print_screen(screen)
-    sleep(1.5)
-
-
-def stats(name: str, ques: int) -> None:
-    width, height = get_terminal_size(fallback=(80, 24))
-    screen = make_screen(width, height)
-    score_in_this_session = SCORE
-    total = get(name, "quick_solver_scores")
-    dynamic_text(screen, f'Player: {name}', 4, 2)
-    dynamic_text(screen,
-                 f'Scored in this session: {score_in_this_session}', 5, 2)
-    dynamic_text(screen, f'Total Score: {total}', 6, 2)
-    if BADGE != badges(name):
-        dynamic_text(screen, 'NEW BADGE UNLOCKED!', 7, 2)
-        store(badges(name), name, "quick_badges")
-    dynamic_text(screen, f'Player Badge: {badges(name)}', 8, 2)
-    badge_list = list(Badges_scores.keys())
-    nt_badge = badge_list[badge_list.index(badges(name)) + 1]
-    score_needed = Badges_scores[nt_badge]
-    dynamic_text(screen,
-                 f'next badge coming: "{nt_badge}"(minimum score needed: {score_needed})', 9, 2)
-    dynamic_text(screen, f'Answered correct: {CORRECT}/{ques}', 11, 2)
-    dynamic_text(screen, f'Answered wrong: {ques - CORRECT}/{ques}', 12, 2)
-    insert_text(screen, f'Total questions answered: {ques}', 13, 2)
-    print_screen(screen)
-    sleep(2.5)
-    os.system('clear')
-    width, height = get_terminal_size(fallback=(80, 24))
-    screen = make_screen(width, height)
-    insert_text(screen, 'TIMES', 4, len(screen[0])//2 - 2)
-    dynamic_text(screen, f'Best time in this session: {min(TIMES)}', 6, 2)
-    dynamic_text(screen, f'Average: {sum(TIMES)/len(TIMES)}', 8, 2)
-    dynamic_text(screen, f'Slowest: {max(TIMES)}', 10, 2)
-    print_screen(screen)
-
-
 def leaderboard(name: str):
-    os.system('clear')
-    print("\n\n\t\\:: Quick Solver ::/\n\n")
     with open(f"{os.path.expanduser('~')}/.qsi/quick_solver_scores.json") as f:
         data = json.load(f)
     data = {k: float(v) for k, v in data.items()}
@@ -665,6 +381,51 @@ def leaderboard(name: str):
     print("_"*66 + "|\n\n")
 
 
+def questions():
+    while 1:
+        try:
+            noq = int(input(
+                "How many questions are you willing to solve in this session?\nNumber of questions: "))
+            return noq
+        except ValueError:
+            print("Invalid input!!")
+            continue
+
+
+def badges(name: str):
+    try:
+        score = float(get(name, "quick_solver_scores"))
+    except (KeyError, FileNotFoundError):
+        score = SCORE
+
+    if score >= 1200000:
+        return "MAX LEVEL SOLVER"
+    elif score >= 1000000:
+        return "Ultimate Pro Solver"
+    elif score >= 250000:
+        return "Immortal Solver"
+    elif score >= 100000:
+        return "Legend"
+    elif score >= 50000:
+        return "Score Machine"
+    elif score >= 20000:
+        return "Unstoppable"
+    elif score >= 10000:
+        return "Mastermind"
+    elif score >= 5000:
+        return "Speed Demon"
+    elif score >= 2500:
+        return "Math Warrior"
+    elif score >= 1000:
+        return "Quick Thinker"
+    elif score >= 500:
+        return "Rising Star"
+    elif score >= 100:
+        return "Newbie"
+    else:
+        return "No Badge Yet"
+
+
 def play():
     global CORRECT
     global SCORE
@@ -690,180 +451,110 @@ def play():
             f.write(
                 "This file was created when the game was first launched on this device.")
 
-    name = username()
-    lvl = level()
-    ques = questions()
-    for i in range(5, 0, -1):
-        os.system('clear')
-        width, height = get_terminal_size(fallback=(80, 24))
-        screen = make_screen(width, height)
-        insert_text(screen, 'We are starting in....',
-                    4, len(screen[0])//2 - 11)
-        num = text2art(str(i)).splitlines()
-        num = [[j for j in i] for i in num]
-        for i in range(len(num)):
-            for j in range(len(num[0])):
-                screen[6 + i][(len(screen[0])//2 -
-                               (len(num[0])//2)) + j] = num[i][j]
-        print_screen(screen)
-        sleep(1)
-    for i in range(1, ques + 1):
-        ask_and_calculate(lvl, i, ques)
-    store(str(float(get(name, "quick_solver_scores")) + SCORE),
-          name, "quick_solver_scores")
-    stats(name, ques)
-    sleep(1.5)
-    leaderboard(name)
+    print("\\:: Quick Solver 2.6.2 ::/")
+    sleep(0.2)
+    print("Starting....")
+    sleep(0.8)
+    name = log_in()
 
-
-def want_desktop() -> None:
-
-    buttons = {
-        0: "Yes",
-        1: "No"
-    }
-    focus = 0
     while 1:
-        os.system('clear')
-        size = get_terminal_size(fallback=(80, 24))
-        screen = make_screen(*size)
-        insert_text(
-            screen, 'Do you want the game icon in your desktop screen??', 4, 2)
-        insert_text(
-            screen, 'Use arrow keys to choose from buttons and press enter to click.', 6, 2)
-        bcol = 3
-        for i, b in enumerate(buttons):
-            draw_button(screen, buttons[b], 7, bcol, focused=(i == focus))
-            bcol += 8
-        print_screen(screen)
-        key = get_key()
-        if key == '\x1b':
-            get_key()
-            key = get_key()
-            if key == 'D':
-                if focus > 0:
-                    focus -= 1
-                    continue
-            elif key == 'C':
-                if focus < len(buttons) - 1:
-                    focus += 1
-                    continue
-        elif key == '\r' or key == '\n':
-            chosen = buttons[focus]
+
+        level = input("""
+Which level of questions do you want?
+1. Beginner
+2. Intermediate
+3. Pro
+4. Master
+5. Legend
+Enter level number (1-5): """).strip()
+
+        if level in "1 2 3 4 5".split(" "):
             break
         else:
-            continue
-    if chosen == 'Yes':
-        os.system(os.path.expanduser("bash ~/.qsi/qsi4dsktp.sh"))
+            print("\nPLease enter a number 1-5, Invalid input.\n")
+    ques = questions()
 
+    print("""
+Points to remember:-
 
-def check_updates() -> None:
+1. "*" means multiply
+2. "/" means divide
 
-    with open(f"{os.path.expanduser('~')}/.Quick_Solver/version.txt", "r") as f:
-        current_version = f.read().strip()
-    url = "https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/latest_version.txt"
+Read the above points clearly, or you might screw up.\n""")
 
-    response = requests.get(url)
+    for i in range(5, 0, -1):
+        sleep(1)
+        sys.stdout.write(f"\r We are starting in {i:.0f}")
+    print()
 
-    if response.status_code == 200:
-        latest_version = response.text.strip()
+    for _ in range(ques):
+        ask_and_calculate(int(level))
+        sleep(1.5)
 
-        if latest_version != current_version:
-            url2 = "https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/whats_new.txt"
-            new = requests.get(url2)
-            if new.status_code == 200:
-                new = new.text.strip()
-            else:
-                new = "\n\nError: failed to fetch 'what's new' section, kindly check your internet connection, if your connection is good, continue by ignoring...\n\n"
-            print()
-            print("="*67)
-            print()
-            print("\\:: IMPORTANT NOTE ::/")
-            print()
-            print("Update Available!!")
-            print(f"\nVersion {latest_version} is available.")
-            print()
-            print("Your currently installed version: ", current_version)
-            print()
-            print(new)
-            screen = [[' ' for _ in range(get_terminal_size(
-                fallback=(80, 24)).columns)] for _ in range(8)]
-            focus = 0
-            buttons = {
-                0: "Yes",
-                1: 'No'
-            }
-            while 1:
-                insert_text(screen, 'Do you want to update?',
-                            0, len(screen[0])//2 - 11)
-                insert_text(
-                    screen, 'Use arrow keys to choose from buttons and press enter to click.', 2, 2)
-                bcol = 4
-                for b in buttons:
-                    draw_button(screen, buttons[b],
-                                1, bcol, focused=(b == focus))
-                    bcol += 8
-                print_screen(screen)
-                key = get_key()
-                if key == '\x1b':
-                    get_key()
-                    key = get_key()
-                    if key == 'D':
-                        if focus > 0:
-                            focus -= 1
-                    elif key == 'C':
-                        if focus < 1:
-                            focus += 1
-                elif key == '\r' or key == '\n':
-                    chosen = buttons[focus]
-                    break
-            if chosen == 'Yes':
-                os.system(os.path.expanduser('bash ~/.qsi/qsi4update.sh'))
+    store(str(float(get(name, "quick_solver_scores")) + SCORE),
+          name, "quick_solver_scores")
 
+    print("\nPlayer Name: ", name)
+    sleep(1)
+    print("\nToday's score: ", SCORE)
+    sleep(1)
+    print("\nTotal score: ", get(name, "quick_solver_scores"))
+    sleep(1)
+    if BADGE != badges(name):
+        print("\nNEW BADGE UNLOCKED!!!")
+        sleep(1)
+    BADGE = badges(name)
+    store(badges(name), name, "quick_badges")
+    print("\nPlayer badge: ", BADGE)
+    badge_list = list(Badges_scores.keys())
+    nt_badge = badge_list[badge_list.index(BADGE) + 1]
+    score_needed = Badges_scores[nt_badge]
+    sleep(1)
+    if score_needed:
+        print(
+            f"\nNext Badge comming: '{nt_badge}' (minimum score needed: {score_needed})")
     else:
-        print("\n\nError: Couldn't check for updates, make sure your internet connection is good. If it is, then the server might be down or some other problem to check for updates.\n\n")
+        print(f'\nNext badge comming: {nt_badge}')
+
+    sleep(1)
+    print(f'\nAnswered correct: {CORRECT}/{ques}')
+    sleep(1)
+    print(f"\nAnswered wrong: {ques - CORRECT}/{ques}")
+    sleep(1)
+    print(f"\nTotal questions attempted: {ques}")
+    sleep(1)
+    if TIMES:
+
+        print("\nToday's best time: ", min(TIMES))
+        sleep(1)
+
+        sleep(1)
+        print("\nAverage time: ", sum(TIMES)/len(TIMES))
+        sleep(1)
+        print("\nSlowest time: ", max(TIMES))
+        sleep(1)
+
+    leaderboard(name)
+
+    NAME = name
 
 
-def main() -> None:
+def main():
     while 1:
-        play()
-        focus = 0
-        buttons = {
-            0: "Yes",
-            1: 'No'
-        }
-        while 1:
-            os.system('clear')
-            width, height = get_terminal_size(fallback=(80, 24))
-            screen = make_screen(width, height)
-            insert_text(screen, 'Do you want to play again?',
-                        4, len(screen[0])//2 - 11)
-            insert_text(
-                screen, 'Use arrow keys to choose from buttons and press enter to click.', 6, 2)
-            bcol = 4
-            for b in buttons:
-                draw_button(screen, buttons[b],
-                            8, bcol, focused=(b == focus))
-                bcol += 8
-            print_screen(screen)
-            key = get_key()
-            if key == '\x1b':
-                get_key()
-                key = get_key()
-                if key == 'D':
-                    if focus > 0:
-                        focus -= 1
-                elif key == 'C':
-                    if focus < 1:
-                        focus += 1
-            elif key == '\r' or key == '\n':
-                chosen = buttons[focus]
-                break
-        if chosen == 'No':
+        try:
+            play()
+        except ValueError:
+            print("Invalid input!!!! Game crashed, restarting.............")
+            sleep(1.8)
+            continue
+
+        again = input(
+            "Do you want to play again?\nSolve more?? ([Yes]/No): ").lower().strip()
+        if 'no' in again or 'na' in again or 'nh' in again or again == "n" or 'nopy' in again:
             break
 
 
-if not os.path.exists(os.path.expanduser('~/.Quick_Solver/first.txt')):
+if not os.path.exists(os.path.expanduser("~/.Quick_Solver/first.txt")):
     want_desktop()
 check_updates()
 main()

@@ -1,6 +1,12 @@
-What's new in v2.6.2
-Actually the 3.0.0 version only works properly on my computer, but for you users? I may not work, you need a setup like I have.
-So I have returned back to v2.6.2, v3.0.0 will not work on your computers, sorry.
-
--- Dhananjoy Bhuyan(Developer)
+What's new in v3.0.0
+Now, this version is fully working and is something very different, get the experience of a website or GUI game but in terminal!! Yes, it uses ascii art, runs in terminal, but!! It looks awsome, it has textboxes and buttons and all!! I call it TUI(Terminal User Interface)!!
+It looks something like:
++-----------------------------+
+|      Quick Solver 3.0.0     |
+|                             |
+|     +----------------+      |
+|     | Enter text.....|      |
+|     +----------------+      |
++-----------------------------+
+Not exactly like that, way better than that...but you get the idea right?? HAHA!
 ....................................................................

@@ -48,6 +48,7 @@ mkdir -p ~/.qsi
 cd ~/.Quick_Solver
 echo "Installing dependency3"
 python -m pip install requests
+python -m pip install art
 echo "installed dependency3"
 echo " "
 echo " "

@@ -1,20 +1,6 @@
-What's new in v3.0.0:
-This is totally different now!! You have a TUI(Terminal User Interface) Now which uses ascii art... Now it looks like a website or real game with textboxes and buttons rather than raw input prompts!! It's Kind of like:
+What's new in v2.6.2
+Actually the 3.0.0 version only works properly on my computer, but for you users? I may not work, you need a setup like I have.
+So I have returned back to v2.6.2, v3.0.0 will not work on your computers, sorry.
 
-+-----------------------+
-|   Quick Solver 3.0.0  |
-|                       |
-|    +------------+     |
-|    |Enter text..|     |
-|    +------------+     |
-+-----------------------+
-Not exactly like this, way better than this, but you get the idea right?? It looks awesome, better UI(User Interface) and UX(User eXperience)!!!!!!!!!
-
-But instead of updating normally, update like this to make sure it works:
-1. Open your file explorer
-2. Delete the old quick_solver_installer.sh file(if you haven't)
-3. Download the new one like you downloaded before.
-4. Run it like:
-bash /path/to/quick_solver_installer.sh
-Done!!
+-- Dhananjoy Bhuyan(Developer)
 ....................................................................

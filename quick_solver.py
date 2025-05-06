@@ -15,8 +15,10 @@ import requests
 import json
 from shutil import get_terminal_size
 from string import ascii_letters, digits, punctuation
-from art import text2art
-
+try:
+    from art import text2art
+except ImportError:
+  os.system('python3 -m pip install art')
 
 SCORE = 0
 CORRECT = 0

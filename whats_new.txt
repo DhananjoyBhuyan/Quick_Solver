@@ -10,4 +10,11 @@ This is totally different now!! You have a TUI(Terminal User Interface) Now whic
 +-----------------------+
 Not exactly like this, way better than this, but you get the idea right?? It looks awesome, better UI(User Interface) and UX(User eXperience)!!!!!!!!!
 
+But instead of updating normally, update like this to make sure it works:
+1. Open your file explorer
+2. Delete the old quick_solver_installer.sh file(if you haven't)
+3. Download the new one like you downloaded before.
+4. Run it like:
+bash /path/to/quick_solver_installer.sh
+Done!!
 ....................................................................

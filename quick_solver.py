@@ -18,7 +18,7 @@ from string import ascii_letters, digits, punctuation
 try:
     from art import text2art
 except ImportError:
-  os.system('python3 -m pip install art')
+  os.system('python -m pip install art')
 
 SCORE = 0
 CORRECT = 0

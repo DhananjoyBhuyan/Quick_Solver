@@ -833,6 +833,7 @@ def check_updates() -> None:
                 os.system('clear')
             if chosen == 'Yes':
                 os.system(os.path.expanduser('bash ~/.qsi/qsi4update.sh'))
+                sys.exit()
 
     else:
         print("\n\nError: Couldn't check for updates, make sure your internet connection is good. If it is, then the server might be down or some other problem to check for updates.\n\n")

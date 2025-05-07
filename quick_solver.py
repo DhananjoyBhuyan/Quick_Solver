@@ -307,7 +307,7 @@ def set_visible(text: str, placeholder: str) -> str:
         return '█' + placeholder
     else:
         if len(text) > visible_length:
-            return text[-visible_length] + '█'
+            return text[-visible_length:] + '█'
         else:
             return text[:] + '█'
 

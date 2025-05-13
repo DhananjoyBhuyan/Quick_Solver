@@ -576,7 +576,7 @@ def ask_and_calculate(level: int, qn: int, ques: int) -> None:
         if FORGIVEN not in [0, None]:
             FORGIVEN -= 1
             dynamic_text(
-                screen, "It's alright, wrong answer forgiven because of your '{BADGE}' badge. Score + 5", 12, 2)
+                screen, f"It's alright, wrong answer forgiven because of your '{BADGE}' badge. Score + 5", 12, 2)
             SCORE += (5*Multiplier)
         print_screen(screen)
     sleep(1.5)

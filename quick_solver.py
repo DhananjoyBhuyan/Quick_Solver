@@ -297,7 +297,7 @@ def dynamic_text(frame: list[list[str]], text: str, row: int, col: int) -> None:
 def make_screen(width: int, height: int) -> list[list[str]]:
     scr = [[' ' for _ in range(width)] for _ in range(height - 1)]
     make_border(scr)
-    insert_text(scr, "\\:: Quick Solver 3.0.2 ::/",
+    insert_text(scr, "\\:: Quick Solver 3.1.0 ::/",
                 2, len(scr[0])//2 - 13)
     return scr
 

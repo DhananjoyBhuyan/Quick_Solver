@@ -840,7 +840,7 @@ def check_updates() -> None:
             print("\n\nError: Couldn't check for updates, make sure your internet connection is good. If it is, then the server might be down or some other problem to check for updates.\n\n")
     except Exception as e:
         print('Error: ', e)
-
+        print("\n\nTo CHECK FOR UPDATES you need internet connection and if your internet is good, then it might be the server having issues.")
 
 def main() -> None:
     while 1:

@@ -1,3 +1,4 @@
-What's new in v3.1.0
-Now, the game will not crash if your internet is off. It needs internet in the starting to check for updates. If updates come, it will notify you. But to check, it needs internet.
-....................................................................
+What's new in v3.1.1!!
+Well, a bug was fixed which could make the game crash. And the UX was improved! The dynamic text rendering is now faster!
+--Dhananjoy Bhuyan(developer)
+.....................................................................

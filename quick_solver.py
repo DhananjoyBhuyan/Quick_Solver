@@ -290,14 +290,14 @@ def dynamic_text(frame: list[list[str]], text: str, row: int, col: int) -> None:
         frame[r][c] = ch
         print_screen(frame)
         c += 1
-        sleep(0.08)
+        sleep(0.028)
     os.system('clear')
 
 
 def make_screen(width: int, height: int) -> list[list[str]]:
     scr = [[' ' for _ in range(width)] for _ in range(height - 1)]
     make_border(scr)
-    insert_text(scr, "\\:: Quick Solver 3.1.0 ::/",
+    insert_text(scr, "\\:: Quick Solver 3.1.1 ::/",
                 2, len(scr[0])//2 - 13)
     return scr
 
@@ -508,6 +508,8 @@ def ask_and_calculate(level: int, qn: int, ques: int) -> None:
         print_screen(screen)
 
         key = get_key()
+        if key == '-' and user_answer:
+            continue
         if key in digits + '-':
             user_answer += key
         elif key == '\x7f':
@@ -841,6 +843,7 @@ def check_updates() -> None:
     except Exception as e:
         print('Error: ', e)
         print("\n\nTo CHECK FOR UPDATES you need internet connection and if your internet is good, then it might be the server having issues.")
+
 
 def main() -> None:
     while 1:

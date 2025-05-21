@@ -297,7 +297,7 @@ def dynamic_text(frame: list[list[str]], text: str, row: int, col: int) -> None:
 def make_screen(width: int, height: int) -> list[list[str]]:
     scr = [[' ' for _ in range(width)] for _ in range(height - 1)]
     make_border(scr)
-    insert_text(scr, "\\:: Quick Solver 3.1.1 ::/",
+    insert_text(scr, "\\:: Quick Solver 3.1.2 ::/",
                 2, len(scr[0])//2 - 13)
     return scr
 
@@ -516,7 +516,10 @@ def ask_and_calculate(level: int, qn: int, ques: int) -> None:
             if user_answer:
                 user_answer = user_answer[:-1]
         elif key == '\r' or key == '\n':
+
             if not user_answer:
+                continue
+            if user_answer.strip() == '-':
                 continue
             end = time()
             user_answer = int(user_answer)

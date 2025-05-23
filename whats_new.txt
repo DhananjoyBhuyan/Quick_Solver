@@ -1,5 +1,4 @@
-What's new in v3.1.2!!
-There was a tiny bug, which most of you might not have noticed, it's okay.. if you keep the bug then the game will crash sometimes and your score in that session will be lost, but if you update and use the bug free version, the game will not crash in-between, it is already so robust and uncrashable, still.... you know.....some users just go crazy on thier keyboard in a hurry and the game crashes due to some strange invalid input. Although I have blocked letters, characters and spaces and all, sometimes when you enter only "-"(minus sign, it's not blocked for negative integer answers) without any numbers accidentally, the game doesn't recognise just "-"(minus sign) as a number so it crashes, BOOM, and your score in that session is lost.
-I've fixed the minus sign issue here. No crash! Uncrashable, unhackable! the awesome Quick Solver 3.1.2!!!!!!!
+What's new in v3.1.3!!
+Now, the dynamic text rendering has been improved and at the last when the game shows the results, times, leaderboard and all, things happen so fast that you can't properly read anything, so now the game stops and waits for some seconds.... so that you can read what's going on.
 --Dhananjoy Bhuyan(developer)
 .....................................................................

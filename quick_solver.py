@@ -290,7 +290,7 @@ def dynamic_text(frame: list[list[str]], text: str, row: int, col: int) -> None:
         frame[r][c] = ch
         print_screen(frame)
         c += 1
-        sleep(0.028)
+        sleep(0.035)
     os.system('clear')
 
 
@@ -610,7 +610,7 @@ def stats(name: str, ques: int) -> None:
     dynamic_text(screen, f'Answered wrong: {ques - CORRECT}/{ques}', 12, 2)
     insert_text(screen, f'Total questions answered: {ques}', 13, 2)
     print_screen(screen)
-    sleep(2.5)
+    sleep(4)
     os.system('clear')
     width, height = get_terminal_size(fallback=(80, 24))
     screen = make_screen(width, height)
@@ -623,7 +623,7 @@ def stats(name: str, ques: int) -> None:
 
 def leaderboard(name: str):
     os.system('clear')
-    print("\n\n\t\\:: Quick Solver ::/\n\n")
+    print("\n\n\t\\:: Quick Solver 3.1.3::/\n\n")
     with open(f"{os.path.expanduser('~')}/.qsi/quick_solver_scores.json") as f:
         data = json.load(f)
     data = {k: float(v) for k, v in data.items()}
@@ -729,8 +729,9 @@ def play():
     store(str(float(get(name, "quick_solver_scores")) + SCORE),
           name, "quick_solver_scores")
     stats(name, ques)
-    sleep(1.5)
+    sleep(3)
     leaderboard(name)
+    sleep(3)
 
 
 def want_desktop() -> None:

@@ -15,6 +15,7 @@ import requests
 import json
 from shutil import get_terminal_size
 from string import ascii_letters, digits, punctuation
+from datetime import date
 
 
 def text2art(char: str) -> str:
@@ -297,7 +298,7 @@ def dynamic_text(frame: list[list[str]], text: str, row: int, col: int) -> None:
 def make_screen(width: int, height: int) -> list[list[str]]:
     scr = [[' ' for _ in range(width)] for _ in range(height - 1)]
     make_border(scr)
-    insert_text(scr, "\\:: Quick Solver 3.1.3 ::/",
+    insert_text(scr, "\\:: Quick Solver 3.2.0 ::/",
                 2, len(scr[0])//2 - 13)
     return scr
 
@@ -623,7 +624,7 @@ def stats(name: str, ques: int) -> None:
 
 def leaderboard(name: str):
     os.system('clear')
-    print("\n\n\t\\:: Quick Solver 3.1.3::/\n\n")
+    print("\n\n\t\\:: Quick Solver 3.2.0::/\n\n")
     with open(f"{os.path.expanduser('~')}/.qsi/quick_solver_scores.json") as f:
         data = json.load(f)
     data = {k: float(v) for k, v in data.items()}
@@ -775,78 +776,114 @@ def want_desktop() -> None:
         os.system(os.path.expanduser("bash ~/.qsi/qsi4dsktp.sh"))
 
 
+def ask_update() -> bool:
+    if not os.path.exists(os.path.expanduser("~/.qsi/update_manager.json")):
+        with open(os.path.expanduser("~/.qsi/update_manager.json"), "w") as f:
+            data = {
+                "wait time": 0,
+                "last update": date.today().isoformat()
+            }
+            json.dump(data, f, indent=4)
+        return True
+
+    with open(os.path.expanduser("~/.qsi/update_manager.json")) as f:
+        data = json.load(f)
+    last_update = date.fromisoformat(data["last update"])
+    now = date.today()
+    days_passed = (now - last_update).days
+    if days_passed >= data["wait time"]:
+
+        data["last update"] = now
+        return True
+    return False
+
+
 def check_updates() -> None:
-    try:
-        with open(f"{os.path.expanduser('~')}/.Quick_Solver/version.txt", "r") as f:
-            current_version = f.read().strip()
-        url = "https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/latest_version.txt"
+    if ask_update():
+        try:
+            with open(f"{os.path.expanduser('~')}/.Quick_Solver/version.txt", "r") as f:
+                current_version = f.read().strip()
+            url = "https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/latest_version.txt"
 
-        response = requests.get(url)
+            response = requests.get(url)
 
-        if response.status_code == 200:
-            latest_version = response.text.strip()
+            if response.status_code == 200:
+                latest_version = response.text.strip()
 
-            if latest_version != current_version:
-                url2 = "https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/whats_new.txt"
-                new = requests.get(url2)
-                if new.status_code == 200:
-                    new = new.text.strip()
-                else:
-                    new = "\n\nError: failed to fetch 'what's new' section, kindly check your internet connection, if your connection is good, continue by ignoring...\n\n"
-                print()
-                print("="*67)
-                print()
-                print("\\:: IMPORTANT NOTE ::/")
-                print()
-                print("Update Available!!")
-                print(f"\nVersion {latest_version} is available.")
-                print()
-                print("Your currently installed version: ", current_version)
-                print()
-                print(new)
-                screen = [[' ' for _ in range(get_terminal_size(
-                    fallback=(80, 24)).columns)] for _ in range(8)]
-                focus = 0
-                buttons = {
-                    0: "Yes",
-                    1: 'No'
-                }
-                sleep(2)
-                while 1:
+                if latest_version != current_version:
+                    url2 = "https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/whats_new.txt"
+                    new = requests.get(url2)
+                    if new.status_code == 200:
+                        new = new.text.strip()
+                    else:
+                        new = "\n\nError: failed to fetch 'what's new' section, kindly check your internet connection, if your connection is good, continue by ignoring...\n\n"
+                    print()
+                    print("="*67)
+                    print()
+                    print("\\:: IMPORTANT NOTE ::/")
+                    print()
+                    print("Update Available!!")
+                    print(f"\nVersion {latest_version} is available.")
+                    print()
+                    print("Your currently installed version: ", current_version)
+                    print()
+                    print(new)
+                    screen = [[' ' for _ in range(get_terminal_size(
+                        fallback=(80, 24)).columns)] for _ in range(8)]
+                    focus = 0
+                    buttons = {
+                        0: "Yes",
+                        1: 'No'
+                    }
+                    sleep(2)
+                    while 1:
 
-                    insert_text(screen, 'Do you want to update?',
-                                0, len(screen[0])//2 - 11)
-                    insert_text(
-                        screen, 'Use arrow keys to choose from buttons and press enter to click.', 2, 2)
-                    bcol = 4
-                    for b in buttons:
-                        draw_button(screen, buttons[b],
-                                    4, bcol, focused=(b == focus))
-                        bcol += 8
-                    print_screen(screen)
-                    key = get_key()
-                    if key == '\x1b':
-                        get_key()
+                        insert_text(screen, 'Do you want to update?',
+                                    0, len(screen[0])//2 - 11)
+                        insert_text(
+                            screen, 'Use arrow keys to choose from buttons and press enter to click.', 2, 2)
+                        bcol = 4
+                        for b in buttons:
+                            draw_button(screen, buttons[b],
+                                        4, bcol, focused=(b == focus))
+                            bcol += 8
+                        print_screen(screen)
                         key = get_key()
-                        if key == 'D':
-                            if focus > 0:
-                                focus -= 1
-                        elif key == 'C':
-                            if focus < 1:
-                                focus += 1
-                    elif key == '\r' or key == '\n':
-                        chosen = buttons[focus]
-                        break
-                    os.system('clear')
-                if chosen == 'Yes':
-                    os.system(os.path.expanduser('bash ~/.qsi/qsi4update.sh'))
-                    sys.exit()
+                        if key == '\x1b':
+                            get_key()
+                            key = get_key()
+                            if key == 'D':
+                                if focus > 0:
+                                    focus -= 1
+                            elif key == 'C':
+                                if focus < 1:
+                                    focus += 1
+                        elif key == '\r' or key == '\n':
+                            chosen = buttons[focus]
+                            break
+                        os.system('clear')
+                    if chosen == 'Yes':
+                        with open(os.path.expanduser("~/.qsi/update_manager.json")) as f:
+                            data = json.load(f)
+                        if data["wait time"] > 0:
+                            data["wait time"] -= 1
+                            with open(os.path.expanduser("~/.qsi/update_manager.json"), "w") as f:
+                                json.dump(data, f, indent=4)
+                        os.system(os.path.expanduser(
+                            'bash ~/.qsi/qsi4update.sh'))
+                        sys.exit()
+                    with open(os.path.expanduser("~/.qsi/update_manager.json")) as f:
+                        data = json.load(f)
+                    if data["wait time"] < 10:
+                        data["wait time"] += 1
+                    with open(os.path.expanduser("~/.qsi/update_manager.json"), "w") as f:
+                        json.dump(data, f, indent=4)
 
-        else:
-            print("\n\nError: Couldn't check for updates, make sure your internet connection is good. If it is, then the server might be down or some other problem to check for updates.\n\n")
-    except Exception as e:
-        print('Error: ', e)
-        print("\n\nTo CHECK FOR UPDATES you need internet connection and if your internet is good, then it might be the server having issues.")
+            else:
+                print("\n\nError: Couldn't check for updates, make sure your internet connection is good. If it is, then the server might be down or some other problem to check for updates.\n\n")
+        except Exception as e:
+            print('Error: ', e)
+            print("\n\nTo CHECK FOR UPDATES you need internet connection and if your internet is good, then it might be the server having issues.")
 
 
 def main() -> None:

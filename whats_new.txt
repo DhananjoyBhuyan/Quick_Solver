@@ -1,4 +1,4 @@
 What's new in v3.2.0!!
-This time we have improved the update system, now, if there's an update, it will not pop up and irritate you everytime, if you say no, it will remind you later but not everytime you open the game.
+This time I have improved the update system, now, if there's an update, it will not pop up and irritate you everytime, if you say no, it will remind you later but not everytime you open the game.
 --Dhananjoy Bhuyan(developer)
 .....................................................................

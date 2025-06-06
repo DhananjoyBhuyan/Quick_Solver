@@ -1,4 +1,4 @@
-What's new in v3.1.3!!
-Now, the dynamic text rendering has been improved and at the last when the game shows the results, times, leaderboard and all, things happen so fast that you can't properly read anything, so now the game stops and waits for some seconds.... so that you can read what's going on.
+What's new in v3.2.0!!
+This time we have improved the update system, now, if there's an update, it will not pop up and irritate you everytime, if you say no, it will remind you later but not everytime you open the game.
 --Dhananjoy Bhuyan(developer)
 .....................................................................

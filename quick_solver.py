@@ -298,7 +298,7 @@ def dynamic_text(frame: list[list[str]], text: str, row: int, col: int) -> None:
 def make_screen(width: int, height: int) -> list[list[str]]:
     scr = [[' ' for _ in range(width)] for _ in range(height - 1)]
     make_border(scr)
-    insert_text(scr, "\\:: Quick Solver 3.2.0 ::/",
+    insert_text(scr, "\\:: Quick Solver 3.2.1 ::/",
                 2, len(scr[0])//2 - 13)
     return scr
 
@@ -612,19 +612,20 @@ def stats(name: str, ques: int) -> None:
     insert_text(screen, f'Total questions answered: {ques}', 13, 2)
     print_screen(screen)
     sleep(4)
-    os.system('clear')
-    width, height = get_terminal_size(fallback=(80, 24))
-    screen = make_screen(width, height)
-    insert_text(screen, 'TIMES', 4, len(screen[0])//2 - 2)
-    dynamic_text(screen, f'Best time in this session: {min(TIMES)}', 6, 2)
-    dynamic_text(screen, f'Average: {sum(TIMES)/len(TIMES)}', 8, 2)
-    dynamic_text(screen, f'Slowest: {max(TIMES)}', 10, 2)
-    print_screen(screen)
+    if TIMES:
+        os.system('clear')
+        width, height = get_terminal_size(fallback=(80, 24))
+        screen = make_screen(width, height)
+        insert_text(screen, 'TIMES', 4, len(screen[0])//2 - 2)
+        dynamic_text(screen, f'Best time in this session: {min(TIMES)}', 6, 2)
+        dynamic_text(screen, f'Average: {sum(TIMES)/len(TIMES)}', 8, 2)
+        dynamic_text(screen, f'Slowest: {max(TIMES)}', 10, 2)
+        print_screen(screen)
 
 
 def leaderboard(name: str):
     os.system('clear')
-    print("\n\n\t\\:: Quick Solver 3.2.0::/\n\n")
+    print("\n\n\t\\:: Quick Solver 3.2.1::/\n\n")
     with open(f"{os.path.expanduser('~')}/.qsi/quick_solver_scores.json") as f:
         data = json.load(f)
     data = {k: float(v) for k, v in data.items()}

@@ -46,12 +46,9 @@ echo " "
 rm -rf ~/.qsi
 mkdir -p ~/.qsi
 cd ~/.Quick_Solver
-echo "Installing dependency3"
-python -m pip install requests
-echo "installed dependency3"
 echo " "
 echo " "
-echo "Installing dependency4....."
+echo "Installing dependency3....."
 echo " "
 echo " "
 wget https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/latest_version.txt
@@ -60,7 +57,7 @@ cd ~/.qsi
 rm -rf ~/Desktop/quick_solver.desktop
 echo " "
 echo " "
-echo "Installing dependency5....."
+echo "Installing dependency4....."
 echo " "
 echo " "
 wget https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/qsi4update.sh
@@ -70,4 +67,5 @@ echo " "
 echo " "
 echo "You can find the game in your all-applications menu!!!"
 echo " "
+python3 -c "from time import sleep; sleep(2)"
 

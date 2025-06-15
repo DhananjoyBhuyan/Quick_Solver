@@ -5,6 +5,7 @@ Created on Thu May  1 12:55:54 2025
 
 Created by: Dhananjoy Bhuyan
 """
+
 import sys
 import tty
 import termios
@@ -42,6 +43,7 @@ BADGE = None
 FORGIVEN = None
 Multiplier = 1
 Bonus = 0
+NAME = None
 Badges_scores = {'No Badge Yet': 0,
                  'Newbie': 100,
                  'Rising Star': 500,
@@ -298,7 +300,7 @@ def dynamic_text(frame: list[list[str]], text: str, row: int, col: int) -> None:
 def make_screen(width: int, height: int) -> list[list[str]]:
     scr = [[' ' for _ in range(width)] for _ in range(height - 1)]
     make_border(scr)
-    insert_text(scr, "\\:: Quick Solver 3.2.1 ::/",
+    insert_text(scr, "\\:: Quick Solver 3.3.0 ::/",
                 2, len(scr[0])//2 - 13)
     return scr
 
@@ -314,10 +316,14 @@ def set_visible(text: str, placeholder: str) -> str:
             return text[:] + '█'
 
 
-def username() -> str:
+def username(changing: bool = False) -> str:
     global BADGE
     name = ""
     visible = None
+    if not os.path.exists(os.path.expanduser("~/.Quick_Solver/first.txt")):
+        with open(os.path.expanduser("~/.Quick_Solver/first.txt"), "w") as f:
+            f.write(
+                "This file was created when the game was first launched on this device.")
 
     os.system('clear')
     while 1:
@@ -344,49 +350,36 @@ def username() -> str:
         elif key in ascii_letters + digits + ' ' + punctuation:
             os.system('clear')
             name += key
-        else:
+    if not changing:
+        try:
+            get(name, 'quick_solver_scores')
+            BADGE = get(name, 'quick_badges')
             os.system('clear')
-    try:
-        score = get(name, "quick_solver_scores")
-        badge = get(name, "quick_badges")
-        os.system('clear')
-        width, height = get_terminal_size(fallback=(80, 24))
-        screen = make_screen(width, height)
-        insert_text(screen, "Welcome Back!!", 4, len(screen[0])//2 - 7)
-        dynamic_text(
-            screen, f"Hi {name}! Your current score is: {score}", 6, 2)
-        insert_text(screen, f"Current Badge: {badge}", 7, 2)
-        BADGE = badge
-        if BADGE != 'No Badge Yet':
-            badge_bonus(BADGE)
-            insert_text(screen, 'Badge Bonus:', 9, len(screen[0])//2 - 6)
-            dynamic_text(screen, f'Login Bonus: score + {Bonus}', 11, 2)
-            dynamic_text(screen,
-                         f'Score Multiplier: {Multiplier}', 12, 2)
+            screen = make_screen(*get_terminal_size(fallback=(80, 24)))
+            insert_text(screen, 'Welcome Back!', 4, len(screen)//2 - 6)
+            print_screen(screen)
+
+            dynamic_text(screen, 'Hey ' + name + '!!', 6, 2)
+
+            dynamic_text(screen, "Back to rock?? Let's goo!!!", 8, 2)
+            print_screen(screen)
+            sleep(1)
+        except (KeyError, FileNotFoundError):
+            BADGE = 'No Badge Yet'
+            store('0', name, 'quick_solver_scores')
+            store('No Badge Yet', name, 'quick_badges')
+            os.system('clear')
+            screen = make_screen(*get_terminal_size(fallback=(80, 24)))
+            dynamic_text(screen, 'New user detected....',
+                         4, len(screen)//2 - 6)
+            print_screen(screen)
+
+            dynamic_text(screen, 'Hello ' + name + '!!', 6, 2)
+
             dynamic_text(
-                screen, 'This means each time you answer a question, ', 13, 2)
-            dynamic_text(screen,
-                         f'the score you get will be multiplied by {Multiplier}', 14, 2)
-
-            if FORGIVEN not in [None, 0]:
-                insert_text(screen,
-                            'In this session, ', 16, 2)
-                dynamic_text(
-                    screen, f'{FORGIVEN} wrong answers will be forgiven because you have a "{BADGE}" badge.', 17, 2)
-
-    except (KeyError, FileNotFoundError):
-        width, height = get_terminal_size(fallback=(80, 24))
-        screen = make_screen(width, height)
-        dynamic_text(screen, 'New user detected...', 4, len(screen[0])//2 - 10)
-        dynamic_text(screen, f'Hello {name}!!', 6, 2)
-        store('0', name, "quick_solver_scores")
-        store("No Badge Yet", name, "quick_badges")
-
-    insert_text(screen, 'Press any key to proceed.', len(screen) - 3, 2)
-
-    print_screen(screen)
-    get_key()
-
+                screen, 'First time?? Crush it like nothing!! Let\'s Gooo!!', 8, 2)
+            print_screen(screen)
+            sleep(1)
     return name
 
 
@@ -625,7 +618,7 @@ def stats(name: str, ques: int) -> None:
 
 def leaderboard(name: str):
     os.system('clear')
-    print("\n\n\t\\:: Quick Solver 3.2.1::/\n\n")
+    print("\n\n\t\\:: Quick Solver 3.3.0::/\n\n")
     with open(f"{os.path.expanduser('~')}/.qsi/quick_solver_scores.json") as f:
         data = json.load(f)
     data = {k: float(v) for k, v in data.items()}
@@ -684,12 +677,156 @@ def leaderboard(name: str):
     print("_"*66 + "|\n\n")
 
 
-def play():
+def account() -> str | None:
+    global NAME
+    log_out = False
+    focus = 0
+    buttons = {
+        0: 'change username',
+        1: 'log out',
+        2: 'back'
+    }
+    new_name = None
+    while 1:
+        name = NAME
+        os.system('clear')
+        width, height = get_terminal_size(fallback=(80, 24))
+        if height < 17:
+            height = 17
+        screen = make_screen(width, height)
+        n = name
+        if len(name) > 15:
+            n = name[:13] + '...'
+        insert_text(screen, f'Name: {n}', 3, 2)
+        insert_text(screen, 'Badge: ' + str(get(name, "quick_badges") +
+                                            f'        Score: {get(name, "quick_solver_scores")}'), 4, 2)
+        brow = 6
+        for i in buttons:
+            draw_button(screen, buttons[i], brow, 2, focused=(focus == i))
+            brow += 3
+        print_screen(screen)
+        key = get_key()
+        if key == '\x1b':
+            get_key()
+            key = get_key()
+            if key == 'A':
+                if focus > 0:
+                    focus -= 1
+            elif key == 'B':
+                if focus < 2:
+                    focus += 1
+        elif key == '\n' or key == '\r':
+            chosen = buttons[focus]
+            if chosen == 'change username':
+                new_name = username(changing=True)
+                NAME = new_name
+                with open(os.path.expanduser('~/.qsi/quick_solver_scores.json')) as f:
+                    data = json.load(f)
+                score = data[name]
+                data.pop(name)
+                data[new_name] = score
+                with open(os.path.expanduser('~/.qsi/quick_solver_scores.json'), 'w') as f:
+                    json.dump(data, f, indent=4)
+
+                with open(os.path.expanduser('~/.qsi/quick_badges.json')) as f:
+                    data = json.load(f)
+                badge = data[name]
+                data.pop(name)
+                data[new_name] = badge
+
+                with open(os.path.expanduser('~/.qsi/quick_badges.json'), 'w') as f:
+                    json.dump(data, f, indent=4)
+
+            elif chosen == 'log out':
+                log_out = True
+                break
+            else:
+                break
+
+    return log_out
+
+
+def home_screen() -> None:
+    global SCORE, CORRECT, TIMES, BADGE, FORGIVEN, Multiplier, Bonus, NAME
+    SCORE = 0
+    CORRECT = 0
+    TIMES = []
+    BADGE = None
+    FORGIVEN = None
+    Multiplier = 1
+    Bonus = 0
+    focus = 0
+    buttons = {
+        0: 'Play',
+        1: 'Account',
+        2: 'Leaderboard',
+        3: 'Exit'
+    }
+    NAME = username()
+    while 1:
+
+        os.system('clear')
+        screen = make_screen(*get_terminal_size(fallback=(80, 24)))
+        insert_text(screen, 'Home', 4, len(screen[0])//2 - 2)
+        insert_text(
+            screen, 'Use arrow keys to navigate and "Enter" to click.', 5, len(screen[0])//2 - 24)
+        nme = NAME
+        if len(nme) > 18:
+            nme = nme[:15] + '...'
+        insert_text(screen, 'Player: ' + nme, 7,
+                    len(screen[0])//2 - ((8 + len(nme))//2))
+        brow = 9
+        bcol1 = len(screen[0])//2 - 12
+
+        draw_button(screen, buttons[0], brow, bcol1, focused=(focus == 0))
+        draw_button(screen, buttons[1], brow, bcol1 + 14, focused=(focus == 1))
+        draw_button(screen, buttons[2], brow + 4, bcol1, focused=(focus == 2))
+        draw_button(screen, buttons[3], brow + 4,
+                    bcol1 + 16, focused=(focus == 3))
+        print_screen(screen)
+        key = get_key()
+        if key == '\x1b':
+            get_key()
+            key = get_key()
+            if key == 'A':
+                if focus == 2:
+                    focus = 0
+                elif focus == 3:
+                    focus = 1
+            elif key == 'D':
+                if focus == 1:
+                    focus = 0
+                elif focus == 3:
+                    focus = 2
+            elif key == 'C':
+                if focus == 0:
+                    focus = 1
+                elif focus == 2:
+                    focus = 3
+            elif key == 'B':
+                if focus == 0:
+                    focus = 2
+                elif focus == 1:
+                    focus = 3
+
+        elif key == '\n' or key == '\r':
+            chosen = buttons[focus]
+
+            if chosen == 'Play':
+                play(NAME)
+            elif chosen == 'Account':
+                if account():
+                    break
+            elif chosen == 'Leaderboard':
+                leaderboard(NAME)
+            else:
+                sys.exit()
+
+
+def play(name: str) -> None:
     global CORRECT
     global SCORE
-    global NAME
     global FORGIVEN
-    global BADGE
     global Multiplier
     global Bonus
     global TIMES
@@ -698,18 +835,29 @@ def play():
     CORRECT = 0
     SCORE = 0
     TIMES = []
-    NAME = None
-    BADGE = None
     FORGIVEN = None
     Multiplier = 1
     Bonus = 0
 
-    if not os.path.exists(os.path.expanduser("~/.Quick_Solver/first.txt")):
-        with open(os.path.expanduser("~/.Quick_Solver/first.txt"), "w") as f:
-            f.write(
-                "This file was created when the game was first launched on this device.")
+    if BADGE != 'No Badge Yet':
+        os.system('clear')
+        screen = make_screen(*get_terminal_size(fallback=(80, 24)))
 
-    name = username()
+        badge_bonus(get(name, 'quick_badges'))
+        dynamic_text(screen, 'Dear ' + name + ',', 4, 2)
+        dynamic_text(
+            screen, 'In this session, the advantages you will get because of your badge are: ', 6, 2)
+        insert_text(screen, f'Score Multiplier: {
+                    Multiplier}    This means the score you get after each correct answer will be multiplied by the same.', 8, 2)
+        insert_text(screen, 'Bonus score added: ' + str(Bonus), 10, 2)
+        if FORGIVEN:
+            insert_text(screen, 'In this session ' + str(FORGIVEN) +
+                        ' mistakes will be forgiven.', 12, 2)
+        insert_text(screen, 'Press any key to proceed.', len(screen) - 2, 2)
+
+        print_screen(screen)
+        get_key()
+
     lvl = level()
     ques = questions()
     for i in range(5, 0, -1):
@@ -887,43 +1035,9 @@ def check_updates() -> None:
             print("\n\nTo CHECK FOR UPDATES you need internet connection and if your internet is good, then it might be the server having issues.")
 
 
-def main() -> None:
+def main():
     while 1:
-        play()
-        focus = 0
-        buttons = {
-            0: "Yes",
-            1: 'No'
-        }
-        while 1:
-            os.system('clear')
-            width, height = get_terminal_size(fallback=(80, 24))
-            screen = make_screen(width, height)
-            insert_text(screen, 'Do you want to play again?',
-                        4, len(screen[0])//2 - 11)
-            insert_text(
-                screen, 'Use arrow keys to choose from buttons and press enter to click.', 6, 2)
-            bcol = 4
-            for b in buttons:
-                draw_button(screen, buttons[b],
-                            8, bcol, focused=(b == focus))
-                bcol += 8
-            print_screen(screen)
-            key = get_key()
-            if key == '\x1b':
-                get_key()
-                key = get_key()
-                if key == 'D':
-                    if focus > 0:
-                        focus -= 1
-                elif key == 'C':
-                    if focus < 1:
-                        focus += 1
-            elif key == '\r' or key == '\n':
-                chosen = buttons[focus]
-                break
-        if chosen == 'No':
-            break
+        home_screen()
 
 
 if not os.path.exists(os.path.expanduser('~/.Quick_Solver/first.txt')):

@@ -15,8 +15,24 @@ from time import time, sleep
 import requests
 import json
 from shutil import get_terminal_size
-from string import ascii_letters, digits, punctuation
+from string import (
+    ascii_letters,
+    digits,
+    punctuation
+)
 from datetime import date
+from os.path import expanduser as expuser
+
+
+LATEST_VERSION_URL = "https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/latest_version.txt"
+RELEASE_NOTES_URL = "https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/whats_new.txt"
+
+
+def gts():
+
+    return get_terminal_size(
+        fallback=(80, 24)
+    )
 
 
 def text2art(char: str) -> str:
@@ -44,20 +60,22 @@ FORGIVEN = None
 Multiplier = 1
 Bonus = 0
 NAME = None
-Badges_scores = {'No Badge Yet': 0,
-                 'Newbie': 100,
-                 'Rising Star': 500,
-                 'Quick Thinker': 1000,
-                 'Math Warrior': 2500,
-                 'Speed Demon': 5000,
-                 'Mastermind': 10000,
-                 'Unstoppable': 20000,
-                 'Score Machine': 50000,
-                 'Legend': 100000,
-                 'Immortal Solver': 250000,
-                 'Ultimate Pro Solver': 1000000,
-                 'MAX LEVEL SOLVER': 1200000,
-                 'No more badges, you already reached MAX LEVEL. More badges will be added later on in updates.': None}
+Badges_scores = {
+    'No Badge Yet': 0,
+    'Newbie': 100,
+    'Rising Star': 500,
+    'Quick Thinker': 1000,
+    'Math Warrior': 2500,
+    'Speed Demon': 5000,
+    'Mastermind': 10000,
+    'Unstoppable': 20000,
+    'Score Machine': 50000,
+    'Legend': 100000,
+    'Immortal Solver': 250000,
+    'Ultimate Pro Solver': 1000000,
+    'MAX LEVEL SOLVER': 1200000,
+    'No more badges, you already reached MAX LEVEL. More badges will be added later on in updates.': None
+}
 
 
 def generate_questions(level: int = 1):
@@ -124,6 +142,7 @@ def badge_bonus(badge: str):
     global Multiplier
     global SCORE
     global Bonus
+
     daily_login = {
         "Newbie": 0,
         "Rising Star": 0,
@@ -197,15 +216,18 @@ def store(data,
     database_name += '.json'
 
     _add2json(
-        f"{os.path.expanduser('~')}/.qsi/{database_name}", key, data)
+        f"{expuser('~')}/.qsi/{database_name}",
+        key,
+        data
+    )
 
 
 def get(key: str,
         database_name: str):
 
     database_name += '.json'
-    if os.path.exists(f"{os.path.expanduser('~')}/.qsi/{database_name}"):
-        with open(f"{os.path.expanduser('~')}/.qsi/{database_name}") as f:
+    if os.path.exists(f"{expuser('~')}/.qsi/{database_name}"):
+        with open(f"{expuser('~')}/.qsi/{database_name}") as f:
             full_data = json.load(f)
         if not full_data:
             raise KeyError("Database is empty.")
@@ -225,7 +247,9 @@ def get_key() -> str:
         tty.setraw(fd)             # Turn off buffering
         key = sys.stdin.read(1)    # Read 1 character
     finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        termios.tcsetattr(fd,
+                          termios.TCSADRAIN,
+                          old_settings)
 
     return key
 
@@ -242,12 +266,26 @@ def make_border(frame: list[list[str]]) -> None:
     for row in range(len(frame)):
 
         frame[row][0], frame[row][-1] = '|', '|'
-    for row, col in [(0, 0), (-1, 0), (0, -1), (-1, -1)]:
+    for row, col in [
+            (0, 0),
+            (-1, 0),
+            (0, -1),
+            (-1, -1)
+    ]:
         frame[row][col] = '+'
 
 
-def make_box(screen: list[list[str]], row: int, col: int, width: int, height: int) -> None:
-    box = [[' ' for _ in range(width)] for _ in range(height)]
+def make_box(screen: list[list[str]],
+             row: int,
+             col: int,
+             width: int,
+             height: int) -> None:
+    box = [
+        [
+            ' '
+            for _ in range(width)
+        ] for _ in range(height)
+    ]
     make_border(box)
     for i in range(height):
         for j in range(width):
@@ -255,7 +293,10 @@ def make_box(screen: list[list[str]], row: int, col: int, width: int, height: in
     del box
 
 
-def insert_text(frame: list[list[str]], text: str, row: int, col: int) -> None:
+def insert_text(frame: list[list[str]],
+                text: str,
+                row: int,
+                col: int) -> None:
     sw = len(frame[0]) - 1
     sh = len(frame) - 1
     r = row
@@ -270,17 +311,34 @@ def insert_text(frame: list[list[str]], text: str, row: int, col: int) -> None:
             r += 1
 
 
-def insert_text_in_box(frame: list[list[str]], text: str, box_row: int, box_col: int, box_width: int, box_height: int) -> None:
-    box = [[' ' for _ in range(box_width)] for _ in range(box_height)]
+def insert_text_in_box(frame: list[list[str]],
+                       text: str,
+                       box_row: int,
+                       box_col: int,
+                       box_width: int,
+                       box_height: int) -> None:
+    box = [
+        [
+            ' '
+            for _ in range(box_width)
+        ] for _ in range(box_height)
+    ]
     make_border(box)
     insert_text(box, text, 1, 1)
     for i in range(box_height):
         for j in range(box_width):
-            frame[box_row + i][box_col + j] = box[i][j]
+            frame[
+                box_row + i
+            ][
+                box_col + j
+            ] = box[i][j]
     del box
 
 
-def dynamic_text(frame: list[list[str]], text: str, row: int, col: int) -> None:
+def dynamic_text(frame: list[list[str]],
+                 text: str,
+                 row: int,
+                 col: int) -> None:
     r = row
     c = col
     for ch in text:
@@ -297,15 +355,24 @@ def dynamic_text(frame: list[list[str]], text: str, row: int, col: int) -> None:
     os.system('clear')
 
 
-def make_screen(width: int, height: int) -> list[list[str]]:
-    scr = [[' ' for _ in range(width)] for _ in range(height - 1)]
+def make_screen(width: int,
+                height: int) -> list[list[str]]:
+    scr = [
+        [
+            ' '
+            for _ in range(width)
+        ] for _ in range(height - 1)
+    ]
     make_border(scr)
-    insert_text(scr, "\\:: Quick Solver 3.3.0 ::/",
-                2, len(scr[0])//2 - 13)
+    insert_text(scr,
+                "\\:: Quick Solver 3.4.0 ::/",
+                2,
+                len(scr[0])//2 - 13)
     return scr
 
 
-def set_visible(text: str, placeholder: str) -> str:
+def set_visible(text: str,
+                placeholder: str) -> str:
     visible_length = len(placeholder)
     if not text:
         return '█' + placeholder
@@ -320,23 +387,48 @@ def username(changing: bool = False) -> str:
     global BADGE
     name = ""
     visible = None
-    if not os.path.exists(os.path.expanduser("~/.Quick_Solver/first.txt")):
-        with open(os.path.expanduser("~/.Quick_Solver/first.txt"), "w") as f:
+    if not os.path.exists(
+            expuser(
+                "~/.Quick_Solver/first.txt"
+            )
+    ):
+        with open(
+                expuser(
+                    "~/.Quick_Solver/first.txt"
+                ), "w") as f:
             f.write(
-                "This file was created when the game was first launched on this device.")
+                "This file was created when the game was first launched on this device."
+            )
 
     os.system('clear')
     while 1:
 
-        scr_width, scr_height = get_terminal_size(fallback=(80, 24))
+        scr_width, scr_height = gts()
 
-        screen = make_screen(scr_width, scr_height)
-        visible = set_visible(name, 'Enter you username...')
-        insert_text_in_box(screen, visible, len(screen) //
-                           2 - 1, len(screen[0])//2 - 12, 24, 3)
+        screen = make_screen(
+            scr_width,
+            scr_height
+        )
+        visible = set_visible(
+            name,
+            'Enter your username...'
+        )
+        insert_text_in_box(
+            screen,
+            visible,
+            len(screen) //
+            2 - 1,
+            len(screen[0])//2 - 12,
+            24,
+            3
+        )
 
-        insert_text(screen, "Username:", len(
-            screen)//2 - 2, len(screen[0])//2 - 4)
+        insert_text(
+            screen,
+            "Username:",
+            len(screen)//2 - 2,
+            len(screen[0])//2 - 4
+        )
 
         print_screen(screen)
         key = get_key()
@@ -344,10 +436,14 @@ def username(changing: bool = False) -> str:
             os.system('clear')
             if name:
                 name = name[:-1]
-        elif key == '\r' or key == '\n':
+        elif (key == '\r' or
+              key == '\n'):
             if name:
                 break
-        elif key in ascii_letters + digits + ' ' + punctuation:
+        elif key in (ascii_letters +
+                     digits +
+                     ' ' +
+                     punctuation):
             os.system('clear')
             name += key
     if not changing:
@@ -355,84 +451,171 @@ def username(changing: bool = False) -> str:
             get(name, 'quick_solver_scores')
             BADGE = get(name, 'quick_badges')
             os.system('clear')
-            screen = make_screen(*get_terminal_size(fallback=(80, 24)))
-            insert_text(screen, 'Welcome Back!', 4, len(screen)//2 - 6)
+            screen = make_screen(
+                *gts()
+            )
+            insert_text(
+                screen,
+                'Welcome Back!',
+                4,
+                len(screen)//2 - 6
+            )
             print_screen(screen)
 
-            dynamic_text(screen, 'Hey ' + name + '!!', 6, 2)
+            dynamic_text(screen,
+                         'Hey ' +
+                         name +
+                         '!!',
+                         6,
+                         2)
 
-            dynamic_text(screen, "Back to rock?? Let's goo!!!", 8, 2)
+            dynamic_text(
+                screen,
+                "Back to rock?? Let's goo!!!",
+                8,
+                2
+            )
             print_screen(screen)
             sleep(1)
         except (KeyError, FileNotFoundError):
             BADGE = 'No Badge Yet'
-            store('0', name, 'quick_solver_scores')
-            store('No Badge Yet', name, 'quick_badges')
+            store('0',
+                  name,
+                  'quick_solver_scores')
+            store('No Badge Yet',
+                  name,
+                  'quick_badges')
             os.system('clear')
-            screen = make_screen(*get_terminal_size(fallback=(80, 24)))
-            dynamic_text(screen, 'New user detected....',
-                         4, len(screen)//2 - 6)
+            screen = make_screen(
+                *gts()
+            )
+            dynamic_text(
+                screen,
+                'New user detected....',
+                4,
+                len(screen)//2 - 6
+            )
             print_screen(screen)
 
-            dynamic_text(screen, 'Hello ' + name + '!!', 6, 2)
+            dynamic_text(screen,
+                         'Hello ' +
+                         name +
+                         '!!',
+                         6,
+                         2)
 
             dynamic_text(
-                screen, 'First time?? Crush it like nothing!! Let\'s Gooo!!', 8, 2)
+                screen,
+                'First time?? Crush it like nothing!! Let\'s Gooo!!',
+                8,
+                2
+            )
             print_screen(screen)
             sleep(1)
     return name
 
 
-def draw_button(screen: list[list[str]], text: str, row: int, col: int, focused: bool) -> None:
-    button = [[' ' for _ in range(len(text) + 4)] for _ in range(3)]
-    insert_text(button, f"[{text}]", 1, 1)
+def draw_button(screen: list[list[str]],
+                text: str,
+                row: int,
+                col: int,
+                focused: bool) -> None:
+    button = [
+        [
+            ' '
+            for _ in range(len(text) + 4)
+        ] for _ in range(3)
+    ]
+    insert_text(button,
+                f"[{text}]",
+                1,
+                1)
     if focused:
         make_border(button)
 
     for i in range(len(button)):
         for j in range(len(button[0])):
-            screen[row + i][col + j] = button[i][j]
+            screen[
+                row + i
+            ][
+                col + j
+            ] = button[i][j]
     del button
 
 
 def level() -> int:
     focus = 0
-    buttons = {0: 'lvl 1: Beginner',
-               1: 'lvl 2: Intermediate',
-               2: 'lvl 3: Pro',
-               3: 'lvl 4: Master',
-               4: 'lvl 5: Legend'
-               }
+    buttons = {
+        0: 'lvl 1: Beginner',
+        1: 'lvl 2: Intermediate',
+        2: 'lvl 3: Pro',
+        3: 'lvl 4: Master',
+        4: 'lvl 5: Legend'
+    }
 
     os.system('clear')
-    width, height = get_terminal_size(fallback=(80, 24))
+    width, height = gts()
 
     screen = make_screen(width, height)
     insert_text(
-        screen, 'Now you are going to choose a level to play.', 4, 2)
+        screen,
+        'Now you are going to choose a level to play.',
+        4,
+        2
+    )
     insert_text(
-        screen, 'Remember that Higher level means Harder Questions.', 5, 2)
+        screen,
+        'Remember that Higher level means Harder Questions.',
+        5,
+        2
+    )
     insert_text(
-        screen, 'For choosing, use arrow keys to navigate to a button. And Press "enter" to click on the button.', 7, 2)
+        screen,
+        'For choosing, use arrow keys to navigate to a button. And Press "enter" to click on the button.',
+        7,
+        2
+    )
     insert_text(
-        screen, 'When a button is selected, a box will be drawn around it...if it is not selected it will be just like: [button text] (Wrapped in []) The OK button below is selected. Now press Enter!!', 9, 2)
-    insert_text_in_box(screen, '[OK]', 12, len(screen[0])//2 - 3, 6, 3)
+        screen,
+        'When a button is selected, a box will be drawn around it...if it is not selected it will be just like: [button text] (Wrapped in []) The OK button below is selected. Now press Enter!!',
+        9,
+        2
+    )
+    insert_text_in_box(
+        screen,
+        '[OK]',
+        12,
+        len(screen[0])//2 - 3,
+        6,
+        3
+    )
     print_screen(screen)
     get_key()
 
     while 1:
         os.system('clear')
 
-        screen = make_screen(get_terminal_size(fallback=(80, 24)).columns, 22)
+        screen = make_screen(
+            gts().columns,
+            22
+        )
 
-        insert_text(screen, 'Choose Level', 4, len(screen[0])//2 - 6)
+        insert_text(screen,
+                    'Choose Level',
+                    4,
+                    len(screen[0])//2 - 6)
 
         brow = 5
 
         for idx, b in enumerate(buttons.keys()):
 
-            draw_button(screen, buttons[b], brow, 2, focused=(idx == focus))
+            draw_button(screen,
+                        buttons[b],
+                        brow,
+                        2,
+                        focused=(idx == focus))
             brow += 3
+
         print_screen(screen)
         key = get_key()
         if key == '\x1b':
@@ -457,22 +640,45 @@ def questions() -> int:
 
     while 1:
         os.system('clear')
-        width, height = get_terminal_size(fallback=(80, 24))
+        width, height = gts()
 
         screen = make_screen(width, height)
 
         insert_text(
-            screen, 'How many questions will you answer in this session?', 4, 2)
+            screen,
+            'How many questions will you answer in this session?',
+            4,
+            2
+        )
         insert_text(
-            screen, '**Please note that you only have to enter an integer.**', 6, 2)
-        insert_text(screen, 'Number of Questions:', 7, len(screen[0])//2 - 10)
-        insert_text_in_box(screen, set_visible(noq, 'Enter number of questions....'), 8,
-                           len(screen[0])//2 - 16, 32, 3)
+            screen,
+            '**Please note that you only have to enter an integer.**',
+            6,
+            2
+        )
+        insert_text(
+            screen,
+            'Number of Questions:',
+            7,
+            len(screen[0])//2 - 10
+        )
+        insert_text_in_box(
+            screen,
+            set_visible(
+                noq,
+                'Enter number of questions....'
+            ),
+            8,
+            len(screen[0])//2 - 16,
+            32,
+            3
+        )
         print_screen(screen)
         key = get_key()
         if key in digits:
             noq += key
-        elif key == '\r' or key == '\n':
+        elif (key == '\r' or
+              key == '\n'):
             if noq:
                 return int(noq)
         elif key == '\x7f':
@@ -482,7 +688,9 @@ def questions() -> int:
             pass
 
 
-def ask_and_calculate(level: int, qn: int, ques: int) -> None:
+def ask_and_calculate(level: int,
+                      qn: int,
+                      ques: int) -> None:
     global SCORE, FORGIVEN, TIMES, Multiplier, CORRECT
 
     question = generate_questions(level)
@@ -491,18 +699,44 @@ def ask_and_calculate(level: int, qn: int, ques: int) -> None:
     start = time()
     while 1:
         os.system('clear')
-        size = get_terminal_size(fallback=(80, 24))
+        size = gts()
         screen = make_screen(*size)
-        insert_text(screen, f'Question: {qn}/{ques}', 3, 2)
-        insert_text(screen, question, 4, len(
-            screen[0])//2 - (len(question)//2))
-        insert_text(screen, 'Your answer:', 6, len(screen[0])//2 - 6)
-        visible = set_visible(user_answer, "Enter your answer....")
-        insert_text_in_box(screen, visible, 8, len(screen[0])//2 - 12, 24, 3)
+        insert_text(
+            screen,
+            f'Question: {qn}/{ques}',
+            3,
+            2
+        )
+        insert_text(
+            screen,
+            question,
+            4,
+            len(screen[0])//2 -
+            (len(question)//2)
+        )
+        insert_text(
+            screen,
+            'Your answer:',
+            6,
+            len(screen[0])//2 - 6
+        )
+        visible = set_visible(
+            user_answer,
+            "Enter your answer...."
+        )
+        insert_text_in_box(
+            screen,
+            visible,
+            8,
+            len(screen[0])//2 - 12,
+            24,
+            3
+        )
         print_screen(screen)
 
         key = get_key()
-        if key == '-' and user_answer:
+        if (key == '-' and
+                user_answer):
             continue
         if key in digits + '-':
             user_answer += key
@@ -510,7 +744,6 @@ def ask_and_calculate(level: int, qn: int, ques: int) -> None:
             if user_answer:
                 user_answer = user_answer[:-1]
         elif key == '\r' or key == '\n':
-
             if not user_answer:
                 continue
             if user_answer.strip() == '-':
@@ -523,110 +756,252 @@ def ask_and_calculate(level: int, qn: int, ques: int) -> None:
 
     if user_answer == answer:
         os.system('clear')
-        size = get_terminal_size(fallback=(80, 24))
+        size = gts()
         screen = make_screen(*size)
         time_taken = end - start
         TIMES.append(float(f'{time_taken:.3f}'))
         CORRECT += 1
         x = text2art("CORRECT").splitlines()
-        yay = [[j for j in i] for i in x]
+        yay = [
+            [
+                j for j in i
+            ] for i in x
+        ]
         for i in range(len(yay)):
             for j in range(len(yay[0])):
                 screen[4 + i][2 + j] = yay[i][j]
-        dynamic_text(screen, f'You took {time_taken:.3f} seconds!', 10, 5)
+        dynamic_text(
+            screen,
+            f'You took {time_taken:.3f} seconds!',
+            10,
+            5
+        )
         os.system('clear')
         if time_taken < 1:
             insert_text(
-                screen, 'Whoa!! You just did it under 1 second! Score + 100', 12, 2)
+                screen,
+                'Whoa!! You just did it under 1 second! Score + 100',
+                12,
+                2
+            )
             SCORE += (100*Multiplier)
         elif time_taken < 2:
             insert_text(
-                screen, 'Awesome! You just did it under 2 seconds. Score + 50', 12, 2)
+                screen,
+                'Awesome! You just did it under 2 seconds. Score + 50',
+                12,
+                2
+            )
             SCORE += (50*Multiplier)
         elif time_taken < 3:
             insert_text(
-                screen, 'time taken less than 3 seconds. Score + 10', 12, 2)
+                screen,
+                'time taken less than 3 seconds. Score + 10',
+                12,
+                2)
             SCORE += (10*Multiplier)
         elif time_taken < 5:
             insert_text(
-                screen, "Score + 8, time taken less than 5 seconds...", 12, 2)
+                screen,
+                "Score + 8, time taken less than 5 seconds...",
+                12,
+                2
+            )
             SCORE += (8*Multiplier)
         elif time_taken < 10:
             insert_text(
-                screen, "Score + 5, time taken less than 10 seconds...", 12, 2)
+                screen,
+                "Score + 5, time taken less than 10 seconds...",
+                12,
+                2
+            )
             SCORE += (5*Multiplier)
         else:
             insert_text(
-                screen, "Score + 1, VERY SLOW!! But it's okay practice will make you perfect.", 12, 2)
+                screen,
+                "Score + 1, VERY SLOW!! But it's okay practice will make you perfect.",
+                12,
+                2
+            )
             SCORE += (1*Multiplier)
 
         print_screen(screen)
     else:
         os.system('clear')
-        width, height = get_terminal_size(fallback=(80, 24))
+        width, height = gts()
         screen = make_screen(width, height)
         x = text2art("WRONG").splitlines()
-        boo = [[j for j in i] for i in x]
+        boo = [
+            [
+                j for j in i
+            ] for i in x
+        ]
         for i in range(len(boo)):
             for j in range(len(boo[0])):
                 screen[4 + i][2 + j] = boo[i][j]
-        dynamic_text(screen,
-                     f'Wrong answer! The correct answer was {answer}', 10, 5)
+        dynamic_text(
+            screen,
+            f'Wrong answer! The correct answer was {answer}',
+            10,
+            5
+        )
 
         if FORGIVEN not in [0, None]:
             FORGIVEN -= 1
             dynamic_text(
-                screen, f"It's alright, wrong answer forgiven because of your '{BADGE}' badge. Score + 5", 12, 2)
+                screen,
+                f"It's alright, wrong answer forgiven because of your '{
+                    BADGE}' badge. Score + 5",
+                12,
+                2
+            )
             SCORE += (5*Multiplier)
         print_screen(screen)
     sleep(1.5)
 
 
-def stats(name: str, ques: int) -> None:
-    width, height = get_terminal_size(fallback=(80, 24))
+def stats(name: str,
+          ques: int,
+          badge_unlocked: bool = False) -> None:
+    width, height = gts()
     screen = make_screen(width, height)
     score_in_this_session = SCORE
     total = get(name, "quick_solver_scores")
-    dynamic_text(screen, f'Player: {name}', 4, 2)
-    dynamic_text(screen,
-                 f'Scored in this session: {score_in_this_session}', 5, 2)
-    dynamic_text(screen, f'Total Score: {total}', 6, 2)
-    if BADGE != badges(name):
-        dynamic_text(screen, 'NEW BADGE UNLOCKED!', 7, 2)
-        store(badges(name), name, "quick_badges")
-    dynamic_text(screen, f'Player Badge: {badges(name)}', 8, 2)
+    insert_text(
+        screen,
+        'Press Ctrl + C to skip.',
+        len(screen)-4,
+        2
+    )
+    dynamic_text(
+        screen,
+        f'Player: {name}',
+        4,
+        2
+    )
+    dynamic_text(
+        screen,
+        f'Scored in this session: {score_in_this_session}',
+        5,
+        2
+    )
+    dynamic_text(
+        screen,
+        f'Total Score: {total}',
+        6,
+        2
+    )
+    if badge_unlocked:
+        dynamic_text(
+            screen,
+            'NEW BADGE UNLOCKED!',
+            7,
+            2
+        )
+
+    dynamic_text(
+        screen,
+        f'Player Badge: {badges(name)}',
+        8,
+        2
+    )
     badge_list = list(Badges_scores.keys())
-    nt_badge = badge_list[badge_list.index(badges(name)) + 1]
+    nt_badge = badge_list[
+        badge_list.index(badges(name)) + 1
+    ]
     score_needed = Badges_scores[nt_badge]
-    dynamic_text(screen,
-                 f'next badge coming: "{nt_badge}"(minimum score needed: {score_needed})', 9, 2)
-    dynamic_text(screen, f'Answered correct: {CORRECT}/{ques}', 11, 2)
-    dynamic_text(screen, f'Answered wrong: {ques - CORRECT}/{ques}', 12, 2)
-    insert_text(screen, f'Total questions answered: {ques}', 13, 2)
+    dynamic_text(
+        screen,
+        f'next badge coming: "{nt_badge}"(minimum score needed: {
+            score_needed})',
+        9,
+        2
+    )
+    dynamic_text(
+        screen,
+        f'Answered correct: {CORRECT}/{ques}',
+        11,
+        2
+    )
+    dynamic_text(
+        screen,
+        f'Answered wrong: {ques - CORRECT}/{ques}',
+        12,
+        2
+    )
+    insert_text(
+        screen,
+        f'Total questions answered: {ques}',
+        13,
+        2
+    )
     print_screen(screen)
     sleep(4)
     if TIMES:
         os.system('clear')
-        width, height = get_terminal_size(fallback=(80, 24))
+        width, height = gts()
         screen = make_screen(width, height)
-        insert_text(screen, 'TIMES', 4, len(screen[0])//2 - 2)
-        dynamic_text(screen, f'Best time in this session: {min(TIMES)}', 6, 2)
-        dynamic_text(screen, f'Average: {sum(TIMES)/len(TIMES)}', 8, 2)
-        dynamic_text(screen, f'Slowest: {max(TIMES)}', 10, 2)
+        insert_text(
+            screen,
+            'Press Ctrl + C to skip.',
+            len(screen)-6,
+            2
+        )
+        insert_text(
+            screen,
+            'TIMES',
+            4,
+            len(screen[0])//2 - 2
+        )
+        dynamic_text(
+            screen,
+            f'Best time in this session: {min(TIMES)}',
+            6,
+            2
+        )
+        dynamic_text(
+            screen,
+            f'Average: {sum(TIMES)/len(TIMES)}',
+            8,
+            2
+        )
+        dynamic_text(
+            screen,
+            f'Slowest: {max(TIMES)}',
+            10,
+            2
+        )
         print_screen(screen)
 
 
 def leaderboard(name: str):
     os.system('clear')
-    print("\n\n\t\\:: Quick Solver 3.3.0::/\n\n")
-    with open(f"{os.path.expanduser('~')}/.qsi/quick_solver_scores.json") as f:
+    print("\n\n\t\\:: Quick Solver 3.4.0::/\n\n")
+    print('\nPress Ctrl + C to skip.\n')
+    with open(
+            f"{expuser('~')}/.qsi/quick_solver_scores.json"
+    ) as f:
         data = json.load(f)
-    data = {k: float(v) for k, v in data.items()}
-    data = dict(sorted(data.items(), key=lambda x: x[1], reverse=True))
+    data = {
+        k: float(v)
+        for k, v in data.items()
+    }
+    data = dict(
+        sorted(
+            data.items(),
+            key=lambda x: x[1],
+            reverse=True
+        )
+    )
     if len(data.keys()) == 1:
         print("\n\nNOTE: More than one player can play on this device with different usernames, so the leader board doesn't have only one player to show!\n")
         print("Even you can compete with yourself with different usernames!!\n")
-    print("_"*66 + "\nLeaderboard:-" + (" "*53) + "|")
+    print(
+        "_"*66 +
+        "\nLeaderboard:-" +
+        (" "*53) +
+        "|"
+    )
     print("_"*66 + "|")
     sleep(1)
 
@@ -640,21 +1015,44 @@ def leaderboard(name: str):
             spaces_to_add = 16 - len(curname)
             curname += (" "*spaces_to_add)
 
-        spaces_to_add2 = 66 - (2 + len(str(idx)) + 3 +
-                               len(curname) + 18 + len(str(score)))
+        spaces_to_add2 = (
+            66 -
+            (
+                2 +
+                len(str(idx)) +
+                3 +
+                len(curname) +
+                18 +
+                len(str(score))
+            )
+        )
 
         if umcn == name:
-            print(f"| {idx} | {curname}(You)    | score: {score}", end="")
-            print(" "*spaces_to_add2 + "|")
+            print(
+                f"| {idx} | {curname}(You)    | score: {score}",
+                end=""
+            )
+            print(
+                " "*spaces_to_add2 + "|"
+            )
         else:
-            print(f'| {idx} | {curname}         | score: {score}', end="")
-            print(" "*spaces_to_add2 + "|")
+            print(
+                f'| {idx} | {curname}         | score: {score}',
+                end=""
+            )
+            print(
+                " "*spaces_to_add2 + "|"
+            )
         sleep(1)
     print("_"*66 + "|\n\n")
 
     print("PLAYER BADGES: ")
     sleep(1)
-    with open(os.path.expanduser("~/.qsi/quick_badges.json")) as f:
+    with open(
+            expuser(
+                "~/.qsi/quick_badges.json"
+            )
+    ) as f:
         pbadges = json.load(f)
     print("_"*66)
     print("Badges:-" + " "*58 + "|")
@@ -668,10 +1066,23 @@ def leaderboard(name: str):
             spaces_to_add = 16 - len(player)
             player += (" "*spaces_to_add)
 
-        spaces_to_add2 = 66 - (2 + len(str(idx)) + 3 +
-                               len(player) + 13 + len(str(pbadges[umpn])) + 1)
+        spaces_to_add2 = (
+            66 -
+            (
+                2 +
+                len(str(idx)) +
+                3 +
+                len(player) +
+                13 +
+                len(str(pbadges[umpn])) +
+                1
+            )
+        )
 
-        print(f"| {idx} | {player}    | badge: {pbadges[umpn]} ", end="")
+        print(
+            f"| {idx} | {player}    | badge: {pbadges[umpn]} ",
+            end=""
+        )
         print(" "*spaces_to_add2 + "|")
         sleep(1)
     print("_"*66 + "|\n\n")
@@ -690,19 +1101,43 @@ def account() -> str | None:
     while 1:
         name = NAME
         os.system('clear')
-        width, height = get_terminal_size(fallback=(80, 24))
+        width, height = gts()
         if height < 17:
             height = 17
-        screen = make_screen(width, height)
+        screen = make_screen(
+            width,
+            height
+        )
         n = name
         if len(name) > 15:
             n = name[:13] + '...'
-        insert_text(screen, f'Name: {n}', 3, 2)
-        insert_text(screen, 'Badge: ' + str(get(name, "quick_badges") +
-                                            f'        Score: {get(name, "quick_solver_scores")}'), 4, 2)
+        insert_text(
+            screen,
+            f'Name: {n}',
+            3,
+            2
+        )
+        insert_text(
+            screen,
+            'Badge: ' +
+            str(get(
+                name,
+                "quick_badges"
+            ) +
+                f'        Score: {get(name, "quick_solver_scores")}'
+            ),
+            4,
+            2
+        )
         brow = 6
         for i in buttons:
-            draw_button(screen, buttons[i], brow, 2, focused=(focus == i))
+            draw_button(
+                screen,
+                buttons[i],
+                brow,
+                2,
+                focused=(focus == i)
+            )
             brow += 3
         print_screen(screen)
         key = get_key()
@@ -715,27 +1150,54 @@ def account() -> str | None:
             elif key == 'B':
                 if focus < 2:
                     focus += 1
-        elif key == '\n' or key == '\r':
+        elif (key == '\n' or
+              key == '\r'):
             chosen = buttons[focus]
             if chosen == 'change username':
                 new_name = username(changing=True)
                 NAME = new_name
-                with open(os.path.expanduser('~/.qsi/quick_solver_scores.json')) as f:
+                with open(
+                        expuser(
+                            '~/.qsi/quick_solver_scores.json'
+                        )
+                ) as f:
                     data = json.load(f)
                 score = data[name]
                 data.pop(name)
                 data[new_name] = score
-                with open(os.path.expanduser('~/.qsi/quick_solver_scores.json'), 'w') as f:
-                    json.dump(data, f, indent=4)
+                with open(
+                        expuser(
+                            '~/.qsi/quick_solver_scores.json'
+                        ),
+                        'w'
+                ) as f:
+                    json.dump(
+                        data,
+                        f,
+                        indent=4
+                    )
 
-                with open(os.path.expanduser('~/.qsi/quick_badges.json')) as f:
+                with open(
+                        expuser(
+                            '~/.qsi/quick_badges.json'
+                        )
+                ) as f:
                     data = json.load(f)
                 badge = data[name]
                 data.pop(name)
                 data[new_name] = badge
 
-                with open(os.path.expanduser('~/.qsi/quick_badges.json'), 'w') as f:
-                    json.dump(data, f, indent=4)
+                with open(
+                        expuser(
+                            '~/.qsi/quick_badges.json'
+                        ),
+                        'w'
+                ) as f:
+                    json.dump(
+                        data,
+                        f,
+                        indent=4
+                    )
 
             elif chosen == 'log out':
                 log_out = True
@@ -751,7 +1213,6 @@ def home_screen() -> None:
     SCORE = 0
     CORRECT = 0
     TIMES = []
-    BADGE = None
     FORGIVEN = None
     Multiplier = 1
     Bonus = 0
@@ -762,27 +1223,81 @@ def home_screen() -> None:
         2: 'Leaderboard',
         3: 'Exit'
     }
-    NAME = username()
+    if not NAME:
+        NAME = username()
     while 1:
 
         os.system('clear')
-        screen = make_screen(*get_terminal_size(fallback=(80, 24)))
-        insert_text(screen, 'Home', 4, len(screen[0])//2 - 2)
+        screen = make_screen(
+            *gts()
+        )
         insert_text(
-            screen, 'Use arrow keys to navigate and "Enter" to click.', 5, len(screen[0])//2 - 24)
+            screen,
+            'Home',
+            4,
+            len(screen[0])//2 - 2
+        )
+        insert_text(
+            screen,
+            'Use arrow keys to navigate and "Enter" to click.',
+            5,
+            len(screen[0])//2 - 24
+        )
         nme = NAME
         if len(nme) > 18:
             nme = nme[:15] + '...'
-        insert_text(screen, 'Player: ' + nme, 7,
-                    len(screen[0])//2 - ((8 + len(nme))//2))
+        insert_text(
+            screen,
+            'Player: ' +
+            nme,
+            7,
+            len(screen[0])//2 -
+            (
+                (
+                    8 + len(nme)
+                ) // 2
+            )
+        )
         brow = 9
         bcol1 = len(screen[0])//2 - 12
 
-        draw_button(screen, buttons[0], brow, bcol1, focused=(focus == 0))
-        draw_button(screen, buttons[1], brow, bcol1 + 14, focused=(focus == 1))
-        draw_button(screen, buttons[2], brow + 4, bcol1, focused=(focus == 2))
-        draw_button(screen, buttons[3], brow + 4,
-                    bcol1 + 16, focused=(focus == 3))
+        draw_button(
+            screen,
+            buttons[0],
+            brow,
+            bcol1,
+            focused=(
+                focus == 0
+            )
+        )
+        draw_button(
+            screen,
+            buttons[1],
+            brow,
+            bcol1 +
+            14,
+            focused=(
+                focus == 1
+            )
+        )
+        draw_button(
+            screen,
+            buttons[2],
+            brow + 4,
+            bcol1,
+            focused=(
+                focus == 2
+            )
+        )
+        draw_button(
+            screen,
+            buttons[3],
+            brow + 4,
+            bcol1 + 16,
+            focused=(
+                focus == 3
+            )
+        )
         print_screen(screen)
         key = get_key()
         if key == '\x1b':
@@ -816,6 +1331,7 @@ def home_screen() -> None:
                 play(NAME)
             elif chosen == 'Account':
                 if account():
+                    NAME = None
                     break
             elif chosen == 'Leaderboard':
                 leaderboard(NAME)
@@ -841,19 +1357,59 @@ def play(name: str) -> None:
 
     if BADGE != 'No Badge Yet':
         os.system('clear')
-        screen = make_screen(*get_terminal_size(fallback=(80, 24)))
+        screen = make_screen(
+            *gts()
+        )
 
-        badge_bonus(get(name, 'quick_badges'))
-        dynamic_text(screen, 'Dear ' + name + ',', 4, 2)
+        badge_bonus(
+            get(
+                name,
+                'quick_badges'
+            )
+        )
         dynamic_text(
-            screen, 'In this session, the advantages you will get because of your badge are: ', 6, 2)
-        insert_text(screen, f'Score Multiplier: {
-                    Multiplier}    This means the score you get after each correct answer will be multiplied by the same.', 8, 2)
-        insert_text(screen, 'Bonus score added: ' + str(Bonus), 10, 2)
+            screen,
+            'Dear ' +
+            name +
+            ',',
+            4,
+            2
+        )
+        dynamic_text(
+            screen,
+            'In this session, the advantages you will get because of your badge are: ',
+            6,
+            2
+        )
+        insert_text(
+            screen,
+            f'Score Multiplier: {
+                Multiplier} This means the score you get after each correct answer will be multiplied by the same.',
+            8,
+            2
+        )
+        insert_text(
+            screen,
+            'Bonus score added: ' +
+            str(Bonus),
+            10,
+            2
+        )
         if FORGIVEN:
-            insert_text(screen, 'In this session ' + str(FORGIVEN) +
-                        ' mistakes will be forgiven.', 12, 2)
-        insert_text(screen, 'Press any key to proceed.', len(screen) - 2, 2)
+            insert_text(
+                screen,
+                'In this session ' +
+                str(FORGIVEN) +
+                ' mistakes will be forgiven.',
+                12,
+                2
+            )
+        insert_text(
+            screen,
+            'Press any key to proceed.',
+            len(screen) - 2,
+            2
+        )
 
         print_screen(screen)
         get_key()
@@ -862,23 +1418,60 @@ def play(name: str) -> None:
     ques = questions()
     for i in range(5, 0, -1):
         os.system('clear')
-        width, height = get_terminal_size(fallback=(80, 24))
+        width, height = gts()
         screen = make_screen(width, height)
-        insert_text(screen, 'We are starting in....',
-                    4, len(screen[0])//2 - 11)
-        num = text2art(str(i)).splitlines()
-        num = [[j for j in i] for i in num]
+        insert_text(
+            screen,
+            'We are starting in....',
+            4,
+            len(screen[0])//2 - 11
+        )
+        num = text2art(
+            str(i)
+        ).splitlines()
+        num = [
+            [
+                j
+                for j in i
+            ] for i in num
+        ]
         for i in range(len(num)):
             for j in range(len(num[0])):
-                screen[6 + i][(len(screen[0])//2 -
-                               (len(num[0])//2)) + j] = num[i][j]
+                screen[6 + i][
+                    (
+                        len(screen[0]) // 2 -
+                        (
+                            len(num[0]) // 2
+                        )
+                    ) + j
+                ] = num[i][j]
         print_screen(screen)
         sleep(1)
     for i in range(1, ques + 1):
         ask_and_calculate(lvl, i, ques)
-    store(str(float(get(name, "quick_solver_scores")) + SCORE),
-          name, "quick_solver_scores")
-    stats(name, ques)
+    store(
+        str(
+            float(
+                get(
+                    name,
+                    "quick_solver_scores"
+                )
+            ) +
+            SCORE
+        ),
+        name,
+        "quick_solver_scores"
+    )
+    if BADGE != badges(name):
+
+        store(
+            badges(name),
+            name,
+            "quick_badges"
+        )
+        stats(name, ques, True)
+    else:
+        stats(name, ques)
     sleep(3)
     leaderboard(name)
     sleep(3)
@@ -893,15 +1486,31 @@ def want_desktop() -> None:
     focus = 0
     while 1:
         os.system('clear')
-        size = get_terminal_size(fallback=(80, 24))
+        size = gts()
         screen = make_screen(*size)
         insert_text(
-            screen, 'Do you want the game icon in your desktop screen??', 4, 2)
+            screen,
+            'Do you want the game icon in your desktop screen??',
+            4,
+            2
+        )
         insert_text(
-            screen, 'Use arrow keys to choose from buttons and press enter to click.', 6, 2)
+            screen,
+            'Use arrow keys to choose from buttons and press enter to click.',
+            6,
+            2
+        )
         bcol = 3
         for i, b in enumerate(buttons):
-            draw_button(screen, buttons[b], 7, bcol, focused=(i == focus))
+            draw_button(
+                screen,
+                buttons[b],
+                7,
+                bcol,
+                focused=(
+                    i == focus
+                )
+            )
             bcol += 8
         print_screen(screen)
         key = get_key()
@@ -922,26 +1531,48 @@ def want_desktop() -> None:
         else:
             continue
     if chosen == 'Yes':
-        os.system(os.path.expanduser("bash ~/.qsi/qsi4dsktp.sh"))
+        os.system(
+            expuser(
+                "bash ~/.qsi/qsi4dsktp.sh"
+            )
+        )
 
 
 def ask_update() -> bool:
-    if not os.path.exists(os.path.expanduser("~/.qsi/update_manager.json")):
-        with open(os.path.expanduser("~/.qsi/update_manager.json"), "w") as f:
+    if not os.path.exists(
+            expuser(
+                "~/.qsi/update_manager.json"
+            )
+    ):
+        with open(
+                expuser(
+                    "~/.qsi/update_manager.json"
+                ),
+                "w"
+        ) as f:
             data = {
                 "wait time": 0,
                 "last update": date.today().isoformat()
             }
-            json.dump(data, f, indent=4)
+            json.dump(
+                data,
+                f,
+                indent=4
+            )
         return True
 
-    with open(os.path.expanduser("~/.qsi/update_manager.json")) as f:
+    with open(
+            expuser(
+                "~/.qsi/update_manager.json"
+            )
+    ) as f:
         data = json.load(f)
-    last_update = date.fromisoformat(data["last update"])
+    last_update = date.fromisoformat(
+        data["last update"]
+    )
     now = date.today()
     days_passed = (now - last_update).days
     if days_passed >= data["wait time"]:
-
         data["last update"] = now
         return True
     return False
@@ -950,35 +1581,43 @@ def ask_update() -> bool:
 def check_updates() -> None:
     if ask_update():
         try:
-            with open(f"{os.path.expanduser('~')}/.Quick_Solver/version.txt", "r") as f:
+            with open(
+                    f"{expuser('~')}/.Quick_Solver/version.txt") as f:
                 current_version = f.read().strip()
-            url = "https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/latest_version.txt"
+            url = LATEST_VERSION_URL
 
             response = requests.get(url)
 
             if response.status_code == 200:
                 latest_version = response.text.strip()
 
-                if latest_version != current_version:
-                    url2 = "https://raw.githubusercontent.com/DhananjoyBhuyan/Quick_Solver/main/whats_new.txt"
+                if (latest_version !=
+                        current_version):
+                    url2 = RELEASE_NOTES_URL
                     new = requests.get(url2)
                     if new.status_code == 200:
                         new = new.text.strip()
                     else:
                         new = "\n\nError: failed to fetch 'what's new' section, kindly check your internet connection, if your connection is good, continue by ignoring...\n\n"
-                    print()
-                    print("="*67)
-                    print()
-                    print("\\:: IMPORTANT NOTE ::/")
-                    print()
-                    print("Update Available!!")
-                    print(f"\nVersion {latest_version} is available.")
-                    print()
-                    print("Your currently installed version: ", current_version)
-                    print()
-                    print(new)
-                    screen = [[' ' for _ in range(get_terminal_size(
-                        fallback=(80, 24)).columns)] for _ in range(8)]
+                    print(
+                        f"""
+{"="*67}
+\\:: IMPORTANT NOTE ::/
+Update Available!!
+
+Version {latest_version} is available.
+Your currently installed version: {current_version}
+{new}
+                    """
+                    )
+                    screen = [
+                        [
+                            ' '
+                            for _ in range(
+                                gts().columns
+                            )
+                        ] for _ in range(8)
+                    ]
                     focus = 0
                     buttons = {
                         0: "Yes",
@@ -986,15 +1625,28 @@ def check_updates() -> None:
                     }
                     sleep(2)
                     while 1:
-
-                        insert_text(screen, 'Do you want to update?',
-                                    0, len(screen[0])//2 - 11)
                         insert_text(
-                            screen, 'Use arrow keys to choose from buttons and press enter to click.', 2, 2)
+                            screen,
+                            'Do you want to update?',
+                            0,
+                            len(screen[0])//2 - 11)
+                        insert_text(
+                            screen,
+                            'Use arrow keys to choose from buttons and press enter to click.',
+                            2,
+                            2
+                        )
                         bcol = 4
                         for b in buttons:
-                            draw_button(screen, buttons[b],
-                                        4, bcol, focused=(b == focus))
+                            draw_button(
+                                screen,
+                                buttons[b],
+                                4,
+                                bcol,
+                                focused=(
+                                    b == focus
+                                )
+                            )
                             bcol += 8
                         print_screen(screen)
                         key = get_key()
@@ -1007,26 +1659,56 @@ def check_updates() -> None:
                             elif key == 'C':
                                 if focus < 1:
                                     focus += 1
-                        elif key == '\r' or key == '\n':
+                        elif (key == '\r' or
+                              key == '\n'):
                             chosen = buttons[focus]
                             break
                         os.system('clear')
                     if chosen == 'Yes':
-                        with open(os.path.expanduser("~/.qsi/update_manager.json")) as f:
+                        with open(
+                                expuser(
+                                    "~/.qsi/update_manager.json"
+                                )
+                        ) as f:
                             data = json.load(f)
                         if data["wait time"] > 0:
                             data["wait time"] -= 1
-                            with open(os.path.expanduser("~/.qsi/update_manager.json"), "w") as f:
-                                json.dump(data, f, indent=4)
-                        os.system(os.path.expanduser(
-                            'bash ~/.qsi/qsi4update.sh'))
+                            with open(
+                                    expuser(
+                                        "~/.qsi/update_manager.json"
+                                    ),
+                                    "w"
+                            ) as f:
+                                json.dump(
+                                    data,
+                                    f,
+                                    indent=4
+                                )
+                        os.system(
+                            expuser(
+                                'bash ~/.qsi/qsi4update.sh'
+                            )
+                        )
                         sys.exit()
-                    with open(os.path.expanduser("~/.qsi/update_manager.json")) as f:
+                    with open(
+                            expuser(
+                                "~/.qsi/update_manager.json"
+                            )
+                    ) as f:
                         data = json.load(f)
                     if data["wait time"] < 10:
                         data["wait time"] += 1
-                    with open(os.path.expanduser("~/.qsi/update_manager.json"), "w") as f:
-                        json.dump(data, f, indent=4)
+                    with open(
+                            expuser(
+                                "~/.qsi/update_manager.json"
+                            ),
+                            "w"
+                    ) as f:
+                        json.dump(
+                            data,
+                            f,
+                            indent=4
+                        )
 
             else:
                 print("\n\nError: Couldn't check for updates, make sure your internet connection is good. If it is, then the server might be down or some other problem to check for updates.\n\n")
@@ -1037,10 +1719,22 @@ def check_updates() -> None:
 
 def main():
     while 1:
-        home_screen()
+        try:
+            home_screen()
+        except (
+                KeyboardInterrupt,
+                EOFError
+        ):
+            pass
 
 
-if not os.path.exists(os.path.expanduser('~/.Quick_Solver/first.txt')):
-    want_desktop()
-check_updates()
-main()
+if __name__ == "__main__":
+    if not os.path.exists(
+        expuser(
+            '~/.Quick_Solver/first.txt'
+        )
+    ):
+        want_desktop()
+
+    check_updates()
+    main()

@@ -1,7 +1,8 @@
-What's new in v3.4.0!!
-BIG UPDATE!!!
-Now you have a "HOME SCREEN" and you can now change your username as well! The game flow and UI, UX is improved and Quick Solver now has become totally new and awesome! Please update! I want you to try this, 1740 lines of code added!!!!!
-
-And also! Now the game ending statistics display and leaderboard display is now skippable, just press ctrl + c to directly go to home screen without waiting for the game to show all the Score, Badge, Times, leaderboard, stats and all and finish. This feature is added for Extra restless players who always want to skip game ending stats and wanna play again ASAP!!!
+What's new in v3.5.0!!
+AWESOME UPDATE!!
+You can now use the text box like any other text box from real websites, It supports much more now!!
+New things added(which you could not do before):
+Cursor movement and navigation: You can move the cursor through the text using arrow keys.
+Delete key support: You can press delete key to delete a character.
 --Dhananjoy Bhuyan(developer)
 .....................................................................

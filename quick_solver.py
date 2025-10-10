@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -365,22 +366,29 @@ def make_screen(width: int,
     ]
     make_border(scr)
     insert_text(scr,
-                "\\:: Quick Solver 3.4.0 ::/",
+                "\\:: Quick Solver 3.5.0 ::/",
                 2,
                 len(scr[0])//2 - 13)
     return scr
 
 
 def set_visible(text: str,
-                placeholder: str) -> str:
+                placeholder: str,
+
+                cursor_pos: int = 0) -> str:
+
     visible_length = len(placeholder)
     if not text:
+
         return '█' + placeholder
     else:
-        if len(text) > visible_length:
-            return text[-visible_length:] + '█'
-        else:
-            return text[:] + '█'
+        cursor_index = len(text) + cursor_pos
+
+        if len(text[cursor_index:]) >= visible_length:
+
+            return '█' + text[cursor_index + 1:cursor_index + visible_length]
+
+        return text[-visible_length:cursor_index] + '█' + text[cursor_index + 1:]
 
 
 def username(changing: bool = False) -> str:
@@ -401,6 +409,7 @@ def username(changing: bool = False) -> str:
             )
 
     os.system('clear')
+    cursor_pos = 0
     while 1:
 
         scr_width, scr_height = gts()
@@ -411,7 +420,8 @@ def username(changing: bool = False) -> str:
         )
         visible = set_visible(
             name,
-            'Enter your username...'
+            'Enter your username...',
+            cursor_pos
         )
         insert_text_in_box(
             screen,
@@ -432,20 +442,41 @@ def username(changing: bool = False) -> str:
 
         print_screen(screen)
         key = get_key()
-        if key == '\x7f':
+        # one of the allowed characters.
+        if key in digits + punctuation + ascii_letters + ' ':
             os.system('clear')
-            if name:
-                name = name[:-1]
+            cursor_index = len(name) + cursor_pos
+            name = name[:cursor_index] + key + name[cursor_index:]
+        elif key == '\x7f':  # Backspace.
+
+            # remove the char right before the cursor.
+            cursor_index = len(name) + cursor_pos
+            name = name[:cursor_index - 1] + name[cursor_index:]
+            # memory.
+            del cursor_index
+        elif key == '\x1b':  # escape sequence.
+            os.system('clear')
+            get_key()  # throw away part.
+            key = get_key()  # the real key.
+            if key == 'D':  # left arrow.
+                if cursor_pos > (0-len(name)):
+                    cursor_pos -= 1  # move cursor left.
+            elif key == 'C':  # right arrow.
+                if cursor_pos < 0:
+                    cursor_pos += 1  # move it right.
+            elif key == '3':  # delete key.
+                get_key()  # throw away part.
+
+                # delete the char right after the cursor.
+                if cursor_pos < 0:
+                    cursor_index = len(name) + cursor_pos
+                    name = name[:cursor_index + 1] + \
+                        name[cursor_index + 2:]
+                    cursor_pos += 1
         elif (key == '\r' or
               key == '\n'):
             if name:
                 break
-        elif key in (ascii_letters +
-                     digits +
-                     ' ' +
-                     punctuation):
-            os.system('clear')
-            name += key
     if not changing:
         try:
             get(name, 'quick_solver_scores')
@@ -637,7 +668,7 @@ def level() -> int:
 
 def questions() -> int:
     noq = ""
-
+    cursor_pos = 0
     while 1:
         os.system('clear')
         width, height = gts()
@@ -666,7 +697,8 @@ def questions() -> int:
             screen,
             set_visible(
                 noq,
-                'Enter number of questions....'
+                'Enter number of questions....',
+                cursor_pos
             ),
             8,
             len(screen[0])//2 - 16,
@@ -676,14 +708,37 @@ def questions() -> int:
         print_screen(screen)
         key = get_key()
         if key in digits:
-            noq += key
+            noq = noq[:(len(noq) + cursor_pos)] + key + \
+                noq[(len(noq) + cursor_pos):]
         elif (key == '\r' or
               key == '\n'):
             if noq:
                 return int(noq)
-        elif key == '\x7f':
-            if noq:
-                noq = noq[:-1]
+        elif key == '\x7f':  # Backspace.
+
+            # remove the char right before the cursor.
+            cursor_index = len(noq) + cursor_pos
+            noq = noq[:cursor_index - 1] + noq[cursor_index:]
+            # memory.
+            del cursor_index
+        elif key == '\x1b':  # escape sequence.
+            get_key()  # throw away part.
+            key = get_key()  # the real key.
+            if key == 'D':  # left arrow.
+                if cursor_pos > (0-len(noq)):
+                    cursor_pos -= 1  # move cursor left.
+            elif key == 'C':  # right arrow.
+                if cursor_pos < 0:
+                    cursor_pos += 1  # move it right.
+            elif key == '3':  # delete key.
+                get_key()  # throw away part.
+
+                # delete the char right after the cursor.
+                if cursor_pos < 0:
+                    cursor_index = len(noq) + cursor_pos
+                    noq = noq[:cursor_index + 1] + \
+                        noq[cursor_index + 2:]
+                    cursor_pos += 1
         else:
             pass
 
@@ -697,6 +752,7 @@ def ask_and_calculate(level: int,
     answer = int(eval(question))
     user_answer = ""
     start = time()
+    cursor_pos = 0
     while 1:
         os.system('clear')
         size = gts()
@@ -722,7 +778,8 @@ def ask_and_calculate(level: int,
         )
         visible = set_visible(
             user_answer,
-            "Enter your answer...."
+            "Enter your answer....",
+            cursor_pos
         )
         insert_text_in_box(
             screen,
@@ -739,10 +796,34 @@ def ask_and_calculate(level: int,
                 user_answer):
             continue
         if key in digits + '-':
-            user_answer += key
-        elif key == '\x7f':
-            if user_answer:
-                user_answer = user_answer[:-1]
+            user_answer = user_answer[:(len(
+                user_answer) + cursor_pos)] + key + user_answer[(len(user_answer) + cursor_pos):]
+        elif key == '\x7f':  # Backspace.
+
+            # remove the char right before the cursor.
+            cursor_index = len(user_answer) + cursor_pos
+            user_answer = user_answer[:cursor_index -
+                                      1] + user_answer[cursor_index:]
+            # memory.
+            del cursor_index
+        elif key == '\x1b':  # escape sequence.
+            get_key()  # throw away part.
+            key = get_key()  # the real key.
+            if key == 'D':  # left arrow.
+                if cursor_pos > (0-len(user_answer)):
+                    cursor_pos -= 1  # move cursor left.
+            elif key == 'C':  # right arrow.
+                if cursor_pos < 0:
+                    cursor_pos += 1  # move it right.
+            elif key == '3':  # delete key.
+                get_key()  # throw away part.
+
+                # delete the char right after the cursor.
+                if cursor_pos < 0:
+                    cursor_index = len(user_answer) + cursor_pos
+                    user_answer = user_answer[:cursor_index + 1] + \
+                        user_answer[cursor_index + 2:]
+                    cursor_pos += 1
         elif key == '\r' or key == '\n':
             if not user_answer:
                 continue
@@ -976,7 +1057,7 @@ def stats(name: str,
 
 def leaderboard(name: str):
     os.system('clear')
-    print("\n\n\t\\:: Quick Solver 3.4.0::/\n\n")
+    print("\n\n\t\\:: Quick Solver 3.5.0::/\n\n")
     print('\nPress Ctrl + C to skip.\n')
     with open(
             f"{expuser('~')}/.qsi/quick_solver_scores.json"

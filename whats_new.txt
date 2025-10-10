@@ -1,8 +1,9 @@
-What's new in v3.5.0!!
+What's new in v3.6.0!!
 AWESOME UPDATE!!
-You can now use the text box like any other text box from real websites, It supports much more now!!
+You have a "Delete Account" button now!! If you created a dummy account or created by mistake, you can delete'em now!!!
+And now the text box inputs support much more and behave perfectly like real textbox from a website!!
 New things added(which you could not do before):
 Cursor movement and navigation: You can move the cursor through the text using arrow keys.
 Delete key support: You can press delete key to delete a character.
---Dhananjoy Bhuyan(developer)
+--Dhananjoy Bhuyan(developer, one man army who developed this game alone)
 .....................................................................

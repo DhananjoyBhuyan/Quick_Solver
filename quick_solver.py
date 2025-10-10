@@ -1169,22 +1169,23 @@ def leaderboard(name: str):
     print("_"*66 + "|\n\n")
 
 
-def account() -> str | None:
+def account() -> bool | None:
     global NAME
     log_out = False
     focus = 0
     buttons = {
         0: 'change username',
         1: 'log out',
-        2: 'back'
+        2: 'back',
+        3: 'Delete account'
     }
     new_name = None
     while 1:
         name = NAME
         os.system('clear')
         width, height = gts()
-        if height < 17:
-            height = 17
+        if height < 21:
+            height = 21
         screen = make_screen(
             width,
             height
@@ -1229,7 +1230,7 @@ def account() -> str | None:
                 if focus > 0:
                     focus -= 1
             elif key == 'B':
-                if focus < 2:
+                if focus < 3:
                     focus += 1
         elif (key == '\n' or
               key == '\r'):
@@ -1283,6 +1284,61 @@ def account() -> str | None:
             elif chosen == 'log out':
                 log_out = True
                 break
+            elif chosen == 'Delete account':
+                screen2 = make_screen(*gts())
+                buttons2 = {
+                    0: 'Yes',
+                    1: 'No'
+                }
+                insert_text(
+                    screen2, 'Are you sure you want to delete your account?', 4, 2)
+
+                focus2 = 0
+                while 1:
+                    os.system('clear')
+                    bcol = 2
+
+                    for i in range(2):
+                        draw_button(
+                            screen2,
+                            buttons2[i],
+                            6,
+                            bcol,
+                            (focus2 == i)
+                        )
+                        bcol += 8
+                    print_screen(screen2)
+                    key2 = get_key()
+                    if key2 == '\n' or key2 == '\r':
+                        chosen2 = buttons2[focus2]
+                        break
+                    elif key2 == '\x1b':
+                        get_key()
+                        key2 = get_key()
+                        if key2 == 'D':
+                            if focus2 == 1:
+                                focus2 = 0
+                        elif key2 == 'C':
+                            if focus2 == 0:
+                                focus2 = 1
+                if chosen2 == 'Yes':
+                    with open(expuser('~/.qsi/quick_badges.json'), 'r') as f:
+                        data = json.load(f)
+
+                    data.pop(NAME)
+                    with open(expuser('~/.qsi/quick_solver_scores.json'), 'r') as f:
+                        data2 = json.load(f)
+                    data2.pop(NAME)
+
+                    with open(expuser('~/.qsi/quick_badges.json'), 'w') as f:
+                        json.dump(data, f, indent=4)
+
+                    with open(expuser('~/.qsi/quick_solver_scores.json'), 'w') as f:
+                        json.dump(data2, f, indent=4)
+                    log_out = True
+                    break
+                elif chosen2 == 'No':
+                    continue
             else:
                 break
 

@@ -366,7 +366,7 @@ def make_screen(width: int,
     ]
     make_border(scr)
     insert_text(scr,
-                "\\:: Quick Solver 3.5.0 ::/",
+                "\\:: Quick Solver 3.6.0 ::/",
                 2,
                 len(scr[0])//2 - 13)
     return scr
@@ -1057,7 +1057,7 @@ def stats(name: str,
 
 def leaderboard(name: str):
     os.system('clear')
-    print("\n\n\t\\:: Quick Solver 3.5.0::/\n\n")
+    print("\n\n\t\\:: Quick Solver 3.6.0::/\n\n")
     print('\nPress Ctrl + C to skip.\n')
     with open(
             f"{expuser('~')}/.qsi/quick_solver_scores.json"

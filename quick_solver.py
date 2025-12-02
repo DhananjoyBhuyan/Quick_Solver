@@ -1,4 +1,4 @@
-
+z
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -1518,15 +1518,13 @@ def play(name: str) -> None:
         )
         insert_text(
             screen,
-            f'Score Multiplier: {
-                Multiplier} This means the score you get after each correct answer will be multiplied by the same.',
+            f'Score Multiplier: {Multiplier} This means the score you get after each correct answer will be multiplied by the same.',
             8,
             2
         )
         insert_text(
             screen,
-            'Bonus score added: ' +
-            str(Bonus),
+            'Bonus score added: ' + str(Bonus),
             10,
             2
         )

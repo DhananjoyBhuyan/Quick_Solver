@@ -12,6 +12,6 @@ bash /path/to/quick_solver_installer.sh
 3. Make sure it's enabled.
 4. (Optional step to be sure that the game works) Now open a terminal window and run `chmod 755 ~/Desktop/quick_solver.desktop` or `chmod +x ~/Desktop/quick_solver.desktop`.
 # If nothing works:
-## just run `python3 ~/.Quick_Solver/quick_solver.py` in your terminal and diagnose the issue yourself(if you can) or ask anyone who knows python or chatGPT, Deepseek, Claude, Perplexity, etc.
+## just run `python3 ~/.Quick_Solver/quick_solver.py` in your terminal and diagnose the issue yourself(if you can) or ask anyone who knows python or ask chatGPT, Deepseek, Claude, Perplexity, etc.
 
 

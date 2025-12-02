@@ -931,8 +931,7 @@ def ask_and_calculate(level: int,
             FORGIVEN -= 1
             dynamic_text(
                 screen,
-                f"It's alright, wrong answer forgiven because of your '{
-                    BADGE}' badge. Score + 5",
+                f"It's alright, wrong answer forgiven because of your '{BADGE}' badge. Score + 5",
                 12,
                 2
             )

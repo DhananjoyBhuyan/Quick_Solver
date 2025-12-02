@@ -992,8 +992,7 @@ def stats(name: str,
     score_needed = Badges_scores[nt_badge]
     dynamic_text(
         screen,
-        f'next badge coming: "{nt_badge}"(minimum score needed: {
-            score_needed})',
+        f'next badge coming: "{nt_badge}"(minimum score needed: {score_needed})',
         9,
         2
     )
